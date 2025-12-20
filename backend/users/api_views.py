@@ -32,15 +32,17 @@ def register(request):
 def login_view(request):
     username = request.data.get('username')
     password = request.data.get('password')
+    email = request.data.get('email')
     
-    user = authenticate(username=username, password=password)
+    user = authenticate(username=username, password=password, email=email)
     if user:
-        refresh: RefreshToken.for_user(user)
+        refresh = RefreshToken.for_user(user)
         return Response({
             'refresh':str(refresh),
             'access':str(refresh.access_token),
             'username':user.username,
-            'is_admin':user.is_admin,
+            'email':user.email,
+            'is_admin':user.is_staff,
         })
     else:
         return Response({'error': 'Неправильные данные'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -59,8 +61,11 @@ def logout_view(request):
 @api_view(['POST'])
 def user_profile(request):
     user = request.user
-    return Response({
-        'username':user.username,
-        'email':user.email,
-        'is_admin':user.is_admin
-    })
+    if user:
+        return Response({
+            'username':user.username,
+            'email':user.email,
+            'is_admin':user.is_staff
+        })
+    else:
+        return Response({"error":"Профиль не загружено"})
