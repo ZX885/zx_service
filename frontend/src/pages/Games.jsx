@@ -14,11 +14,13 @@ export default function Games(){
 
     return (
         <div>
-            <h2>Игры</h2>
+            <h2>Категории</h2>
             {games.map(game =>(
-                <div key={game.id}>
-                    <Link to={`/category/${game.id}`}>
-                        {game.title}
+                <div className="card" key={game.id}>
+                    <Link to={`/games/${game.id}/categories`}>
+                        <h1>{game.title}</h1>
+                        {/* <p>{game.slug}</p> */}
+                        {/* <img src={game.image} alt="" /> */}
                     </Link>
                 </div>    
             ))}

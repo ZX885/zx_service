@@ -7,18 +7,22 @@ export default function ProductType(){
     const[types, setTypes] =useState();
 
     useEffect(()=>{
-        api.get(`product-types/${categoryId}/`)
-            .then(res => setTypes(res.data));
+        api.get(`categories/${categoryId}/types`)
+            .then(res => setTypes(res.data))
+            .catch(err => console.error(err));
     }, [categoryId]);
 
     return(
         <div>
             <h2>Типы продуктов</h2>
+
             {types.map(t =>(
                 <div key={t.id}>
-                    <Link to={`/create/${t.id}`}>
-                        {t.id}
+                    <Link to={`/products/${t.id}`}>
+                        {t.title}
                     </Link>
+                    {" | "}
+                    <Link to={`/create/${t.id}`}>Продать</Link>
                 </div>
             ))}
         </div>

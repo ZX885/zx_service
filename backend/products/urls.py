@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.urls import path
 from .views import (
-    # ProductTypeListView,
+    ProductTypeListView,
     ProductAttributeView,
-    # ProductListView,
+    ProductListView,
 )
 
 urlpatterns = [
-    # path('types/<int:category_id>/', ProductTypeListView.as_view()),
+    path('types/<int:category_id>/', ProductTypeListView.as_view()),
     path('attributes/<int:product_type_id>/', ProductAttributeView.as_view()),
-    # path('', ProductListView.as_view()),
+    path('', ProductListView.as_view()),
 ]
