@@ -1,0 +1,21 @@
+.game_wr {
+    display: grid;
+    grid-template-columns: repeat(2, 2fr);
+
+    .card{
+        text-align: center;
+        max-width: 200px;
+        
+        a{
+            text-decoration: none;
+            color: aliceblue;
+        }
+    }
+
+    .card:nth-child(1){
+        background: url(../media/imgs/apps.png);
+    }
+    .card:nth-child(2){
+        background: url(../media/imgs/games.png) 200px;
+    }
+}

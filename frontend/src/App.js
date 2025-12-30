@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navigation";
 import Home from "./pages/Home";
 import Games from "./pages/Games";
+import Platforms from "./pages/Platforms";
 import Categories from "./pages/Categories";
 import ProductType from "./pages/ProductTypes";
 import Products from "./pages/Products";
@@ -18,13 +19,16 @@ function App() {
       <Routes>
         {/* Главная */}
         <Route path="/" element={<Home/>}/>
-        {/* список платформ (PUBG, TELEGRAM) */}
-        <Route path="/games" element={<Games/>}/>
         {/* категории платформ */}
-        <Route path={`/games/:gameId/categories`} element={<Categories/>}/>
+        <Route path={`/catalog`} element={<Games/>}/>
+        {/* список платформ (PUBG, TELEGRAM) */}
+        <Route path="catalog/platforms/:rootId" element={<Platforms/>}/>
         {/* Типы товаров */}
         <Route path="/categories/:categoryId/types" element={<ProductType/>}/>
+        {/*  */}
+        <Route path="/games/:gameId/categories" element={<Categories/>}/>
         {/* Товары */}
+        <Route path="/products/" element={<Products />}/>
         <Route path="/products/:typeId" element={<Products />}/>
         {/* Создание товара */}
         <Route path="/create/:typeId" element={<CreateProduct />}/>

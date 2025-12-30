@@ -1,4 +1,4 @@
-// import "./style.scss"
+import "./style.scss"
 // import logo from "./logo.png"
 // import { Link } from "react-router-dom";
 // export default function Navbar(){
@@ -27,7 +27,7 @@ export default function Navbar() {
 
       <nav style={styles.nav}>
         <NavLink
-          to="/games"
+          to="/catalog"
           style={({ isActive }) =>
             isActive ? styles.activeLink : styles.link
           }
@@ -44,7 +44,7 @@ export default function Navbar() {
           Категории
         </NavLink>
         <NavLink
-          to="/types"
+          to="/products"
           style={({ isActive }) =>
             isActive ? styles.activeLink : styles.link
           }
@@ -79,9 +79,11 @@ export default function Navbar() {
 const styles = {
   header: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center",
+    alignItems:"center",
     alignItems: "center",
     padding: "15px 30px",
+    borderRadius:"10px",
     borderBottom: "1px solid #222",
     background: "#0f0f0f",
   },
@@ -98,6 +100,7 @@ const styles = {
 
   nav: {
     display: "flex",
+    alignItems:"center",
     gap: "20px",
   },
 

@@ -7,7 +7,7 @@ export default function ProductType(){
     const[types, setTypes] =useState();
 
     useEffect(()=>{
-        api.get(`categories/${categoryId}/types`)
+        api.get(`catalog/categories/${categoryId}/types`)
             .then(res => setTypes(res.data))
             .catch(err => console.error(err));
     }, [categoryId]);
