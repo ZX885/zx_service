@@ -9,6 +9,11 @@ body {
   align-items: center;
   display: flex;
   text-align: center;
+  background: -webkit-linear-gradient(129deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 56, 1) 58%, rgba(3, 46, 87, 1) 100%);
+  background: -moz-linear-gradient(129deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 56, 1) 58%, rgba(3, 46, 87, 1) 100%);
+  background: linear-gradient(129deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 56, 1) 58%, rgba(3, 46, 87, 1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000", endColorstr="#032E57", GradientType=0);
+  background-repeat: no-repeat;
 }
 
 code {
@@ -16,6 +21,6 @@ code {
     monospace;
 }
 
-a{
+a {
   text-decoration: none;
 }

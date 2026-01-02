@@ -7,7 +7,7 @@ export default function ProductType(){
     const[types, setTypes] =useState();
 
     useEffect(()=>{
-        api.get(`catalog/categories/${categoryId}/types`)
+        api.get(`products/types/${categoryId}`)
             .then(res => setTypes(res.data))
             .catch(err => console.error(err));
     }, [categoryId]);
@@ -22,7 +22,7 @@ export default function ProductType(){
                         {t.title}
                     </Link>
                     {" | "}
-                    <Link to={`/create/${t.id}`}>Продать</Link>
+                    <Link to={`/create/${t.id}`}>Создать товар</Link>
                 </div>
             ))}
         </div>

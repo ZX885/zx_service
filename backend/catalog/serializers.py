@@ -11,7 +11,7 @@ class RootCategorySerializer(serializers.ModelSerializer):
 class PlatformSerializer(serializers.ModelSerializer):
     class Meta:
         model = Platform
-        fields = ['id', 'title', 'slug']
+        fields = ['id', 'title','image', 'slug']
         
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

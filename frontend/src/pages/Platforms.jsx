@@ -1,3 +1,4 @@
+import "./css/platforms.scss"
 import { useEffect, useState } from "react";
 import { api } from "../api/axios";
 import { Link, useParams } from "react-router-dom";
@@ -25,13 +26,17 @@ export default function Platforms(){
     return (
         <div>
             <h2>Платформы</h2>
-            {platforms.map(plat =>(
+            <div className="plat">
+             {platforms.map(plat =>(
                 <div key={plat.id}>
+
                     <Link to={`/games/${plat.id}/categories`}>
+                        <img className="plat_img" src={plat.image} alt="" />
                         <h1>{plat.title}</h1>
                     </Link>
-                </div>    
-            ))}
+                    </div>
+             ))}
+            </div>    
         </div>
     )
 }

@@ -1,5 +1,5 @@
 from django.db import models
-
+from PIL import Image
 class RootCategory(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)
@@ -16,6 +16,18 @@ class Platform(models.Model):
         )
     title =models.CharField(max_length=100)
     slug = models.SlugField()
+    image = models.ImageField(upload_to='catalog/imgs',blank=True, null=True)
+    
+    def save(self, *args, **kwargs):
+        super(Platform, self).save(*args, **kwargs)
+        if self.image:
+            img = Image.open(self.image.path)
+
+    def delete(self, *args, **kwargs):
+        image_url = self.image.path
+        if image_url != '/media/furniture/default.jpg':
+            os.remove(self.image.path)
+        super().delete(*args, **kwargs)
     
     def __str__(self):
         return f"{self.root.title} > {self.title}"

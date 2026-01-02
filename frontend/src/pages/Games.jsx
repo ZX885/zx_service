@@ -1,4 +1,4 @@
-import './game_style.scss'
+import './css/game_style.scss'
 import { useEffect, useState } from "react";
 import { api } from "../api/axios";
 import { Link } from "react-router-dom";
@@ -22,7 +22,7 @@ export default function Games() {
                         <Link to={`platforms/${root.id}/`}>
                             <h1>{root.title}</h1>
                             {/* <p>{root.slug}</p> */}
-                            {/* <img src={root.image} alt="" /> */}
+                            <img className='plat-img' src={root.image} alt="" />
                         </Link>
                     </div>
                 ))}
