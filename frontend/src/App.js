@@ -7,6 +7,7 @@ import Categories from "./pages/Categories";
 import ProductType from "./pages/ProductTypes";
 import Products from "./pages/Products";
 import CreateProduct from "./pages/CreateProduct";
+import Profile from "./pages/Profile";
 // import logo from './logo.svg';
 // import './App.css';
 
@@ -29,11 +30,13 @@ function App() {
         <Route path="/games/:gameId/categories" element={<Categories/>}/>
         {/* Товары */}
         <Route path="/products/" element={<Products />}/>
-        <Route path="/products/:typeId" element={<Products />}/>
+        <Route path="/products/types/:typeId" element={<Products />}/>
         {/* Создание товара */}
         <Route path="/create/:typeId" element={<CreateProduct />}/>
         
         {/* <Route path="/types/:categoryId" element={<ProductType/>}/> */}
+        <Route path="/users/profile" element={<Profile />}/>
+    
       </Routes>
     </BrowserRouter>
   );

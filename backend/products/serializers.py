@@ -14,9 +14,9 @@ class ProductTypeSerializer(serializers.ModelSerializer):
 class ProductAttributeValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductAttributeValue
-        fields = ['id','___all___']
+        fields = ['id', 'attribute', 'value']
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields= ['id', '___all__']
+        fields= ['id', 'seller','product_type','price','description','is_active', 'created_at']

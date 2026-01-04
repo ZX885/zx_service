@@ -64,12 +64,12 @@ export default function Navbar() {
 
       <div style={styles.right}>
         <NavLink
-          to="/login"
+          to="/profile"
           style={({ isActive }) =>
             isActive ? styles.activeLink : styles.link
           }
         >
-          Логин
+          Профиль
         </NavLink>
       </div>
     </header>

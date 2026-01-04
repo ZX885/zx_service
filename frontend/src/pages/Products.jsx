@@ -21,7 +21,7 @@ export default function Products() {
       {products.map(product => (
         <div key={product.id} style={{ border: "1px solid #444", margin: 10, padding: 10 }}>
           <p>Price: {product.price}</p>
-          <p>{product.description}</p>
+          <p>{product.title}</p>
         </div>
       ))}
     </div>

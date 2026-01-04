@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from .serializers import ProductAttributeSerializer, ProductTypeSerializer, ProductSerializer
 from .models import (
     ProductAttribute,
@@ -29,5 +29,11 @@ class ProductAttributeView(ListAPIView):
     
     def get_queryset(self):
         product_type_id = self.kwargs['product_type_id']
-        return ProductAttribute.objects.filter(product_type_id=product_type_id)
+        return ProductAttribute.objects.filter(
+            product_type_id=product_type_id
+            )
+    
+class ProductListCreateView(ListCreateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
     

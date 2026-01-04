@@ -44,7 +44,7 @@ class ProductAttribute(models.Model):
     field_type =models.CharField(max_length=20, choices=FIELD_TYPES)
     
     def __str__(self):
-        return self.name
+        return f"{self.product_type.title} > {self.name}"
     
     
     
@@ -52,11 +52,14 @@ class ProductAttributeValue(models.Model):
     product = models.ForeignKey(
             Product, 
             on_delete=models.CASCADE,
-            related_name="attributes"
+            related_name="attributes_values"
         )
-    attribute = models.ForeignKey(ProductAttribute, on_delete=models.CASCADE)
+    attribute = models.ForeignKey(
+        ProductAttribute, 
+        on_delete=models.CASCADE
+    )
     value = models.TextField()
     
     def __str__(self):
-        return f"{self.attribute.name}: {self.value}"
+        return f"{self.product.id} | {self.attribute.name}: {self.value}"
     

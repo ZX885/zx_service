@@ -30,7 +30,7 @@ export default function Categories() {
 
       {categories.map(cat => (
         <div key={cat.id}>
-          <Link to={`/products/types/${cat.id}/`}>
+          <Link to={`/products/types/${cat.id}`}>
             {cat.title}
           </Link>
         </div>
