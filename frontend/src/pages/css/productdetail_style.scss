@@ -1,0 +1,19 @@
+.pr-detail {
+
+    display: flex;
+
+    .product-img {
+        width: 1000px;
+        padding: 10px;
+        border-radius: 30px;
+    }
+
+    #price{
+        color: rgb(239, 11, 11);
+        font-size: 32px;
+    }
+}
+
+ul{
+    list-style: none;
+}

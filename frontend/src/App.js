@@ -8,6 +8,7 @@ import ProductType from "./pages/ProductTypes";
 import Products from "./pages/Products";
 import CreateProduct from "./pages/CreateProduct";
 import Profile from "./pages/Profile";
+import ProductDetail from "./pages/ProductDetail";
 // import logo from './logo.svg';
 // import './App.css';
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/games/:gameId/categories" element={<Categories/>}/>
         {/* Товары */}
         <Route path="/products/" element={<Products />}/>
+        <Route path="/products/:productId" element={<ProductDetail />}/>
         <Route path="/products/types/:typeId" element={<Products />}/>
         {/* Создание товара */}
         <Route path="/create/:typeId" element={<CreateProduct />}/>

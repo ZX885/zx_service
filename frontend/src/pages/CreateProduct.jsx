@@ -10,6 +10,7 @@ export default function CreateProduct() {
   const [attributes, setAttributes] = useState([]);
   const [values, setValues] = useState({});
   const [price, setPrice] = useState("");
+  const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
 
   // 1️⃣ Загружаем атрибуты
@@ -87,24 +88,40 @@ export default function CreateProduct() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    const FormData = new FormData();
+    FormData.append("product_type", typeId);
+    FormData.append("price", price);
+    FormData.append("description", description);
+
+    if (image) {
+      FormData.append("image", image);
+    }
+
+    Object.entries(values).forEach(([attrId, value]) =>{
+      FormData.append("attributes", JSON.stringify({
+        attributes:attrId,
+        value: value
+      }));
+    });
+
     const attributeArray = Object.entries(values).map(
       ([attributeId, value]) => ({
         attribute: Number(attributeId),
         value: value
       })
     );
-  
+
     const payload = {
-      seller:1, // temporary
+      seller: 1, // temporary
       product_type: Number(typeId),
       price: price,
       description: description,
       attributes: attributeArray
     };
-  
+
     console.log("SEND:", payload);
-  
+
     try {
       await api.post("/products/", payload);
       alert("Товар создан");
@@ -114,7 +131,7 @@ export default function CreateProduct() {
       alert("Ошибка при создании");
     }
   };
-  
+
 
   return (
     <div>
@@ -141,6 +158,14 @@ export default function CreateProduct() {
         {attributes.map(attr => (
           <div key={attr.id}>
             <label>{attr.name}</label>
+
+            <label>Фото товара</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+
 
             {attr.field_type === "text" && (
               <input

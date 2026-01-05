@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveAPIView
 from .serializers import ProductAttributeSerializer, ProductTypeSerializer, ProductSerializer
 from .models import (
     ProductAttribute,
@@ -35,5 +36,11 @@ class ProductAttributeView(ListAPIView):
     
 class ProductListCreateView(ListCreateAPIView):
     queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    # permission_classes = [IsAuthenticated]
+    
+
+class ProductDetailView(RetrieveAPIView):
+    queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
     

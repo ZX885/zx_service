@@ -12,11 +12,27 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         fields = ['id', 'category', 'title']
 
 class ProductAttributeValueSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source="attribute.name")
+    
     class Meta:
         model = ProductAttributeValue
-        fields = ['id', 'attribute', 'value']
+        fields = ['id', 'name', 'value']
 
 class ProductSerializer(serializers.ModelSerializer):
+    seller = serializers.StringRelatedField()
+    attributes = ProductAttributeValueSerializer(
+        many=True,
+        read_only=True
+    )
     class Meta:
         model = Product
-        fields= ['id', 'seller','product_type','price','description','is_active', 'created_at']
+        fields= [
+            'id',
+            'seller',
+            'product_type',
+            'price',
+            'description',
+            'image',
+            'attributes',
+            'created_at'
+            ]
