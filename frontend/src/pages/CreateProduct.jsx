@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { api } from "../api/axios";
+import axios from "axios";
 
 export default function CreateProduct() {
   const { typeId } = useParams();
@@ -12,11 +13,36 @@ export default function CreateProduct() {
   const [description, setDescription] = useState("");
 
   // 1️⃣ Загружаем атрибуты
+  // useEffect(() => {
+  //   api.get(`/products/attributes/${typeId}/`)
+  //     .then(res => setAttributes(res.data))
+  //     .catch(err => console.error(err));
+  // }, [typeId]);
   useEffect(() => {
-    api.get(`/products/attributes/${typeId}/`)
-      .then(res => setAttributes(res.data))
-      .catch(err => console.error(err));
-  }, [typeId]);
+    if (!typeId) return;
+    axios.get(`http://127.0.0.1:8000/api/products/attributes/${typeId}`)
+      .then(res => {
+        console.log("ATTRIBUTES: ", res.data);
+        setAttributes(res.data);
+      })
+      .catch(err => {
+        console.error("ATTR ERROR: ", err);
+      })
+  }, [typeId])
+  // useEffect(() => {
+  //   if (attributes.length > 0) {
+  //     const initial = {};
+  //     attributes.forEach(attr => {
+  //       if (attr.field_type === "boolean") {
+  //         initial[attr.id] = false;
+  //       } else {
+  //         initial[attr.id] = "";
+  //       }
+  //     });
+  //     setValues(initial);
+  //   }
+  // }, [attributes]);
+
 
   // 2️⃣ Обновление значений
   const handleChange = (attrId, value) => {
@@ -27,28 +53,68 @@ export default function CreateProduct() {
   };
 
   // 3️⃣ Submit
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   const attributeArray = Object.entries(values).map(
+  //     ([attributeId, value]) =>({
+  //       attribute: Number(attributeId),
+  //       value
+  //     })
+  //   )
+  //   const payload = {
+  //     product_type: typeId,
+  //     price: price,
+  //     description,
+  //     attributes: attributeArray
+  //   };
+
+  //   try {
+  //     console.log("SEND:", {
+  //       product_type: Number(typeId),
+  //       price,
+  //       description,
+  //       attributes: payload
+  //     });
+  //     await api.post("/products/", payload);
+  //     alert("Товар создан");
+  //     navigate("/");
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert("Ошибка при создании");
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    const attributeArray = Object.entries(values).map(
+      ([attributeId, value]) => ({
+        attribute: Number(attributeId),
+        value: value
+      })
+    );
+  
     const payload = {
-      product_type: typeId,
-      price,
-      description,
-      attributes: Object.entries(values).map(([attr, value]) => ({
-        attribute: attr,
-        value: String(value)
-      }))
+      seller:1, // temporary
+      product_type: Number(typeId),
+      price: price,
+      description: description,
+      attributes: attributeArray
     };
-
+  
+    console.log("SEND:", payload);
+  
     try {
       await api.post("/products/", payload);
       alert("Товар создан");
       navigate("/");
     } catch (err) {
-      console.error(err);
+      console.error(err.response?.data || err);
       alert("Ошибка при создании");
     }
   };
+  
 
   return (
     <div>
