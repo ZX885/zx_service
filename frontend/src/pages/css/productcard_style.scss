@@ -1,0 +1,22 @@
+
+.product-card{
+    text-decoration: none;
+    color: inherit;
+
+    .product-img{
+        padding: 12px;
+        width: 240px;
+        color: aliceblue;
+        .img{
+            border-radius: 10px;
+            width: 100%;
+            height: 150;
+            object-fit: cover;
+            border-radius: 8;
+        }
+    }
+
+    #price{
+        color: rgb(239, 11, 11);
+    }
+}

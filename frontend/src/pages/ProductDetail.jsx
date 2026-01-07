@@ -42,4 +42,32 @@ export default function ProductDetail() {
         </div>
     )
 
+//     return (
+//     <div style={{ display: "flex", gap: 40 }}>
+//       <img
+//         src={product.image}
+//         alt=""
+//         style={{ width: 400, borderRadius: 12 }}
+//       />
+
+//       <div>
+//         <h2>{product.description}</h2>
+//         <h3>{product.price} ₸</h3>
+//         <p>Продавец: {product.seller}</p>
+
+//         <h4>Характеристики</h4>
+//         <ul>
+//           {product.attributes.map(attr => (
+//             <li key={attr.id}>
+//               <b>{attr.attribute_name}:</b> {attr.value}
+//             </li>
+//           ))}
+//         </ul>
+
+//         <button style={{ padding: 12, fontSize: 16 }}>
+//           Купить
+//         </button>
+//       </div>
+//     </div>
+//   );
 }

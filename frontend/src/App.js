@@ -31,7 +31,7 @@ function App() {
         <Route path="/games/:gameId/categories" element={<Categories/>}/>
         {/* Товары */}
         <Route path="/products/" element={<Products />}/>
-        <Route path="/products/:productId" element={<ProductDetail />}/>
+        <Route path="/product/:productId" element={<ProductDetail />}/>
         <Route path="/products/types/:typeId" element={<Products />}/>
         {/* Создание товара */}
         <Route path="/create/:typeId" element={<CreateProduct />}/>

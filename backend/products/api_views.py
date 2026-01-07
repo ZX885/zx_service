@@ -20,8 +20,12 @@ class ProductListView(ListAPIView):
     serializer_class = ProductSerializer
     
     def get_queryset(self):
+        qs = Product.objects.filter(is_active=True)
         product_type_id = self.request.query_params.get('type')
-        return Product.objects.filter(product_type_id=product_type_id, is_active=True)
+        if product_type:
+            qs = qs.filter(product_type_id=product_type)
+        return qs
+        # return Product.objects.filter(product_type_id=product_type_id, is_active=True)
     
     
 

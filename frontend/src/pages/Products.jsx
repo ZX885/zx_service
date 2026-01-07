@@ -2,13 +2,14 @@ import "./css/product_style.scss"
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../api/axios";
+import ProductCard from "./ProductCard";
 
 export default function Products() {
   const { typeId } = useParams();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    api.get(`/products`)
+    api.get(`/products/?type=${typeId}`)
       .then(res => setProducts(res.data))
       .catch(err => console.log(err));
   }, [typeId]);
@@ -20,18 +21,19 @@ export default function Products() {
       {products.length === 0 && <p>Товаров нет</p>}
       <div className="product-wrapper">
 
-        {products.map(product => (
-          <div
-            className="products-div"
-            key={product.id}>
-            <Link to={`/products/${product.id}`}>
-              <img
+        {products.map(p => (
+          <div className="products-div" key={p.id}>
+
+            <Link to={`/products/${p.id}`}>
+              <ProductCard key={p.id} product={p}/>
+              {/* <img
                 className="product-img"
                 src={product.image}
                 alt="product" />
               <p>Price: {product.price}</p>
               <p>{product.seller}</p>
-              <p>{product.product_type}</p>
+              <p>{product.product_type}</p> */}
+            
             </Link>
           </div>
         ))}

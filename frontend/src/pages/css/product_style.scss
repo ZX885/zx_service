@@ -1,14 +1,19 @@
 .product-wrapper {
 
-    display: grid;
-    grid-template-columns: repeat(2,2fr);
+    // display: grid;
+    // grid-template-columns: repeat(2,2fr);
+    display: flex;
+    gap: 20;
+    flex-wrap: wrap;
+
     .products-div {
+
         border: 1px solid #444;
         margin: 10px;
         padding: 10px;
 
         .product-img {
-            width: 200px;
+            // width: 200px;
             border-radius: 8px;
         }
 
