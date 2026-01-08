@@ -1,6 +1,6 @@
 import './css/game_style.scss'
 import { useEffect, useState } from "react";
-import { api } from "../api/axios";
+import api  from "../api/axios";
 import { Link } from "react-router-dom";
 
 

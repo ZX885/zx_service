@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { api } from "../api/axios";
+import api from "../api/axios";
 import axios from "axios";
 
 export default function CreateProduct() {
@@ -13,6 +13,11 @@ export default function CreateProduct() {
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
 
+  // await api.post("/products/", {
+  //   product_type:typeId,
+  //   price,
+  //   description,
+  // })
   // 1️⃣ Загружаем атрибуты
   // useEffect(() => {
   //   api.get(`/products/attributes/${typeId}/`)
@@ -30,6 +35,7 @@ export default function CreateProduct() {
         console.error("ATTR ERROR: ", err);
       })
   }, [typeId])
+
   // useEffect(() => {
   //   if (attributes.length > 0) {
   //     const initial = {};
@@ -52,6 +58,7 @@ export default function CreateProduct() {
       [attrId]: value
     }));
   };
+  
 
   // 3️⃣ Submit
   // const handleSubmit = async (e) => {
@@ -121,7 +128,7 @@ export default function CreateProduct() {
     };
 
     console.log("SEND:", payload);
-
+    
     try {
       await api.post("/products/", payload);
       alert("Товар создан");

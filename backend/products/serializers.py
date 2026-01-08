@@ -28,7 +28,6 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields= [
             'id',
-            'seller',
             'product_type',
             'price',
             'description',
@@ -36,3 +35,9 @@ class ProductSerializer(serializers.ModelSerializer):
             'attributes',
             'created_at'
             ]
+        read_only_fields = ['seller']
+    
+    def create(self, validation_data):
+        request = self.context["seller"]
+        validation_data["seller"] = request.user
+        return super().create(validation_data)

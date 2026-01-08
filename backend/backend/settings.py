@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-qw6f42n$tx&(=a&g!c5363wo_4poohp*=m=jn+w7)x77z+%0wn
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'zarrux.pythonanywhere.com'
+]
 
 
 # Application definition
@@ -86,6 +88,9 @@ CORS_ALLOWED_ORIGINS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticated",
     ),
 }
 

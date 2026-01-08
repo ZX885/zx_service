@@ -1,8 +1,9 @@
 from django.shortcuts import render
-# from django.urls import path
-# from .views import OrderCreateView, OrderListView
+from django.urls import path
+from .api_views import CreateOrderView, MyOrderView, OrderDetailView
 
-# urlpatterns = [
-#     path('', OrderListView.as_view()),
-#     path('create/', OrderCreateView.as_view()),
-# ]
+urlpatterns = [
+    path('create/', CreateOrderView.as_view()),
+    path('my/', MyOrderView.as_view()),
+    path('<int:pk>/', OrderDetailView.as_view()),
+]

@@ -1,7 +1,7 @@
 import "./css/product_style.scss"
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { api } from "../api/axios";
+import api from "../api/axios";
 import ProductCard from "./ProductCard";
 
 export default function Products() {

@@ -1,13 +1,9 @@
-from django.shortcuts import render
-from django.contrib.auth.models import User
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import MyTokenSerializer, UserSerializer
+from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from django.contrib.auth import authenticate
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from rest_framework import status
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 
 @api_view(['POST'])
 def register(request):
@@ -28,44 +24,15 @@ def register(request):
     user = User.objects.create_user(username=username, password=password, email=email)
     return Response({'success': True}, status=201)
 
-@api_view(['POST'])
-def login_view(request):
-    username = request.data.get('username')
-    password = request.data.get('password')
-    email = request.data.get('email')
-    
-    user = authenticate(username=username, password=password, email=email)
-    if user:
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'refresh':str(refresh),
-            'access':str(refresh.access_token),
-            'username':user.username,
-            'email':user.email,
-            'is_admin':user.is_staff,
-        })
-    else:
-        return Response({'error': 'Неправильные данные'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def logout_view(request):
-    try:
-        token= RefreshToken(request.data.get('refresh'))
-        token=blacklist()
-        return Response({'success': "Успешный выход с аккаунта"})
-    except Exception as a:
-        return Response({'error':str(e)}, status=400)
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenSerializer
     
-@api_view(['POST'])
-def user_profile(request):
-    user = request.user
-    if user:
-        return Response({
-            'username':user.username,
-            'email':user.email,
-            'is_admin':user.is_staff
-        })
-    else:
-        return Response({"error":"Профиль не загружено"})
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+    

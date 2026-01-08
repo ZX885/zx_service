@@ -16,7 +16,9 @@ import "./style.scss"
 
 import { Link, NavLink } from "react-router-dom";
 
+
 export default function Navbar() {
+  const isAuth = !!localStorage.getItem("access")
   return (
     <header style={styles.header}>
       <div style={styles.logo}>
@@ -36,12 +38,12 @@ export default function Navbar() {
         </NavLink>
 
         <NavLink
-          to="/categories"
+          to="/orders"
           style={({ isActive }) =>
             isActive ? styles.activeLink : styles.link
           }
         >
-          Категории
+          Покупки
         </NavLink>
         <NavLink
           to="/products"
@@ -53,7 +55,7 @@ export default function Navbar() {
         </NavLink>
 
         <NavLink
-          to="/create"
+          to="/create/5"
           style={({ isActive }) =>
             isActive ? styles.activeLink : styles.link
           }
@@ -63,14 +65,19 @@ export default function Navbar() {
       </nav>
 
       <div style={styles.right}>
-        <NavLink
+        {/* <NavLink
           to="/profile"
           style={({ isActive }) =>
             isActive ? styles.activeLink : styles.link
           }
         >
           Профиль
-        </NavLink>
+        </NavLink> */}
+        {!isAuth ?(
+          <Link to="/login">Логин</Link>
+        ):(
+          <Link to="/users/profile">Профиль</Link>
+        )}
       </div>
     </header>
   );
@@ -80,10 +87,10 @@ const styles = {
   header: {
     display: "flex",
     justifyContent: "center",
-    alignItems:"center",
+    alignItems: "center",
     alignItems: "center",
     padding: "15px 30px",
-    borderRadius:"10px",
+    borderRadius: "10px",
     borderBottom: "1px solid #222",
     background: "#0f0f0f",
   },
@@ -100,7 +107,7 @@ const styles = {
 
   nav: {
     display: "flex",
-    alignItems:"center",
+    alignItems: "center",
     gap: "20px",
   },
 

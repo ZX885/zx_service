@@ -1,6 +1,6 @@
 import "./css/platforms.scss"
 import { useEffect, useState } from "react";
-import { api } from "../api/axios";
+import api from "../api/axios";
 import { Link, useParams } from "react-router-dom";
 
 

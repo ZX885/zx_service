@@ -13,7 +13,7 @@ export default function ProductCard({ product }) {
                         className="img"
                         />
                 )}
-                <p><b id="price">{product.price}</b></p>
+                   <p><b id="price">{product.price}</b></p>
                 <h4>{product.description.slice(0,40)}...</h4>
                 <small>Продавец: {product.seller}</small>
                 </div>

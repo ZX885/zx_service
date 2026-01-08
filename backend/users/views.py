@@ -24,8 +24,3 @@
 #     )
 #     return Response({'success': True})
 # //////////////////////////////////////////////////////////
-from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import MyTokenSerializer
-
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenSerializer

@@ -1,11 +1,23 @@
 import "./css/productdetail_style.scss"
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { api } from "../api/axios";
+import api from "../api/axios";
 
 export default function ProductDetail() {
     const { productId } = useParams();
     const [product, setProduct] = useState(null);
+
+    const buyProduct = async ()=>{
+        try{
+            await api.post("orders/create/", {
+                productId:productId
+            });
+            alert("Заказ создан!.")
+        }
+        catch(e){
+            alert("Ошибка при покупке");
+        }
+    };
 
     useEffect(() => {
         api.get(`/products/${productId}`)
@@ -25,6 +37,11 @@ export default function ProductDetail() {
                 <div>
 
                     <p id="price"><b>{product.price}</b></p>
+                    
+                    <button onClick={buyProduct}>
+                        Купить
+                    </button>
+
                     <p><b>Описание: </b>{product.description}</p>
                     <p><b>Продавец: </b>{product.seller}</p>
 

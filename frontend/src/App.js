@@ -9,6 +9,8 @@ import Products from "./pages/Products";
 import CreateProduct from "./pages/CreateProduct";
 import Profile from "./pages/Profile";
 import ProductDetail from "./pages/ProductDetail";
+import MyOrders from "./pages/MyOrders";
+import Login from "./pages/Login";
 // import logo from './logo.svg';
 // import './App.css';
 
@@ -36,8 +38,14 @@ function App() {
         {/* Создание товара */}
         <Route path="/create/:typeId" element={<CreateProduct />}/>
         
+        {/* Создание покупки */}
+        <Route path="/orders" element={<MyOrders />}/>
+        
         {/* <Route path="/types/:categoryId" element={<ProductType/>}/> */}
-        <Route path="/users/profile" element={<Profile />}/>
+        <Route path="/users/profile/" element={<Profile />}/>
+        {/* Логин */}
+        <Route path="/login" element={<Login />}/>
+
     
       </Routes>
     </BrowserRouter>

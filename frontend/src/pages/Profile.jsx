@@ -1,31 +1,33 @@
 
 import { useEffect, useState } from "react";
-import { api } from "../api/axios";
-import { Link } from "react-router-dom";
+import api from "../api/axios";
+// import { Link } from "react-router-dom";
 
 
 export default function Profile() {
-    const [roots, setRoots] = useState([]);
+    const [user, setUser] = useState(null);
+
 
     useEffect(() => {
-        api.get("users/profile")
-            .then(res => setRoots(res.data))
-            .catch(err => console.error(err));
+        api.get("users/profile/")
+            .then(res => setUser(res.data))
+            .catch((err) => {
+                alert("Не авторизован!")
+                console.error(err);
+            });
     }, []);
+
+    if (!user) return <p>Загрузка...</p>
 
     return (
         <div>
             <h2>Профиль</h2>
             <div className=''>
-                {roots.map(root => (
-                    <div className="card" key={root.id}>
-                        {/* <Link to={``}> */}
-                            <h1>{root.title}</h1>
-                            {/* <p>{root.slug}</p> */}
-                            <img className='plat-img' src={root.image} alt="" />
-                        {/* </Link> */}
-                    </div>
-                ))}
+                <div><img src={user.image} alt="" /></div>
+                <div>
+                    <p>Имя: {user.username}</p>
+                    <p>Email: {user.email}</p>
+                </div>
             </div>
         </div>
     )
