@@ -1,12 +1,20 @@
 
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-// import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { logout } from "../utils/auth"
 
 export default function Profile() {
     const [user, setUser] = useState(null);
+    function LogoutButton (){
+        const navigate = useNavigate();
 
+        const handleLogout = () =>{
+            logout();
+            navigate("/")
+        }
+        return <button onClick={handleLogout}>Выйти</button>
+    };
 
     useEffect(() => {
         api.get("users/profile/")
@@ -29,6 +37,9 @@ export default function Profile() {
                     <p>Email: {user.email}</p>
                 </div>
             </div>
+
+
+            <LogoutButton />
         </div>
     )
 }

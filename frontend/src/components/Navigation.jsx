@@ -1,24 +1,21 @@
 import "./style.scss"
-// import logo from "./logo.png"
-// import { Link } from "react-router-dom";
-// export default function Navbar(){
-//     return (
-//         <nav className="nav">
-//             <img src={logo} alt="" />
-//             <Link to="/">Главная</Link>
-//             <Link to="/games">Игры</Link>
-//             <Link to="/categories/">платформы</Link>
-//             <Link to="/types/">Категории</Link>
-//             <Link to="/create/">Создать товар</Link>
-//         </nav>
-//     )
-// }
-
-import { Link, NavLink } from "react-router-dom";
-
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import {logout} from "../utils/auth"
 
 export default function Navbar() {
   const isAuth = !!localStorage.getItem("access")
+  // function LogoutButton(){
+  //   const navigate = useNavigate();
+
+  //   const handleLogout =() =>{
+  //     logout();
+  //     navigate("/login");
+  //   };
+
+  //   return <button onClick={handleLogout}>Выйти</button>
+
+  // }
+
   return (
     <header style={styles.header}>
       <div style={styles.logo}>
@@ -51,7 +48,7 @@ export default function Navbar() {
             isActive ? styles.activeLink : styles.link
           }
         >
-          Типы
+          Товары
         </NavLink>
 
         <NavLink
@@ -65,15 +62,7 @@ export default function Navbar() {
       </nav>
 
       <div style={styles.right}>
-        {/* <NavLink
-          to="/profile"
-          style={({ isActive }) =>
-            isActive ? styles.activeLink : styles.link
-          }
-        >
-          Профиль
-        </NavLink> */}
-        {!isAuth ?(
+        {!isAuth ? (
           <Link to="/login">Логин</Link>
         ):(
           <Link to="/users/profile">Профиль</Link>

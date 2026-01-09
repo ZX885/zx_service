@@ -10,24 +10,6 @@ export default function Login() {
     const [password, SetPassword] = useState("");
     const navigate = useNavigate()
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     try {
-
-    //         const res = await axios.post(
-    //             "http://127.0.0.1:8000/api/token/",
-    //             { username, password, }
-
-    //         )
-    //         localStorage.setItem("access", res.data.access);
-    //         localStorage.setItem("refresh", res.data.refresh);
-    //         alert("Успешный вход")
-    //         navigate("/profile")
-
-    //     } catch (err) {
-    //         alert("Неверный логин или пароль!")
-    //     }
-    // }
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {

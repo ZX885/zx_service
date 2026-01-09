@@ -9,14 +9,20 @@ export default function Products() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    api.get(`/products/?type=${typeId}`)
+    const url = typeId
+      ? `/products/?type=${typeId}`
+      : `/products/`;
+
+    api.get(url)
       .then(res => setProducts(res.data))
       .catch(err => console.log(err));
   }, [typeId]);
 
   return (
     <div>
-      <h2>Товары</h2>
+      <h2>
+        Товары{/*  {products.length >0 && `(${products.length})`} */}
+      </h2>
 
       {products.length === 0 && <p>Товаров нет</p>}
       <div className="product-wrapper">
@@ -24,16 +30,8 @@ export default function Products() {
         {products.map(p => (
           <div className="products-div" key={p.id}>
 
-            <Link to={`/products/${p.id}`}>
-              <ProductCard key={p.id} product={p}/>
-              {/* <img
-                className="product-img"
-                src={product.image}
-                alt="product" />
-              <p>Price: {product.price}</p>
-              <p>{product.seller}</p>
-              <p>{product.product_type}</p> */}
-            
+            <Link to={`/product/${p.id}`}>
+              <ProductCard key={p.id} product={p} />
             </Link>
           </div>
         ))}

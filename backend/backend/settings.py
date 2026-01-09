@@ -27,7 +27,8 @@ SECRET_KEY = 'django-insecure-qw6f42n$tx&(=a&g!c5363wo_4poohp*=m=jn+w7)x77z+%0wn
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'zarrux.pythonanywhere.com'
+    'zarrux.pythonanywhere.com',
+    '127.0.0.1'
 ]
 
 

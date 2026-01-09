@@ -7,14 +7,14 @@ export default function ProductDetail() {
     const { productId } = useParams();
     const [product, setProduct] = useState(null);
 
-    const buyProduct = async ()=>{
-        try{
+    const buyProduct = async () => {
+        try {
             await api.post("orders/create/", {
-                productId:productId
+                productId: productId
             });
             alert("Заказ создан!.")
         }
-        catch(e){
+        catch (e) {
             alert("Ошибка при покупке");
         }
     };
@@ -37,7 +37,7 @@ export default function ProductDetail() {
                 <div>
 
                     <p id="price"><b>{product.price}</b></p>
-                    
+
                     <button onClick={buyProduct}>
                         Купить
                     </button>
@@ -58,33 +58,4 @@ export default function ProductDetail() {
             </div>
         </div>
     )
-
-//     return (
-//     <div style={{ display: "flex", gap: 40 }}>
-//       <img
-//         src={product.image}
-//         alt=""
-//         style={{ width: 400, borderRadius: 12 }}
-//       />
-
-//       <div>
-//         <h2>{product.description}</h2>
-//         <h3>{product.price} ₸</h3>
-//         <p>Продавец: {product.seller}</p>
-
-//         <h4>Характеристики</h4>
-//         <ul>
-//           {product.attributes.map(attr => (
-//             <li key={attr.id}>
-//               <b>{attr.attribute_name}:</b> {attr.value}
-//             </li>
-//           ))}
-//         </ul>
-
-//         <button style={{ padding: 12, fontSize: 16 }}>
-//           Купить
-//         </button>
-//       </div>
-//     </div>
-//   );
 }
