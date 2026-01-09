@@ -1,0 +1,280 @@
+(import "./style.scss"
+import { Link, NavLink } from "react-router-dom";
+
+export default function Navbar() {
+  const isAuth = !!localStorage.getItem("access")
+
+
+  return (
+    <header style={styles.header}>
+      <div style={styles.logo}>
+        <Link to="/" style={styles.logoText}>
+          ZX Маркетплейс
+        </Link>
+      </div>
+
+      <nav style={styles.nav}>
+        <NavLink
+          to="/catalog"
+          style={({ isActive }) =>
+            isActive ? styles.activeLink : styles.link
+          }
+        >
+          Платформы
+        </NavLink>
+
+        <NavLink
+          to="/orders"
+          style={({ isActive }) =>
+            isActive ? styles.activeLink : styles.link
+          }
+        >
+          Покупки
+        </NavLink>
+        <NavLink
+          to="/products"
+          style={({ isActive }) =>
+            isActive ? styles.activeLink : styles.link
+          }
+        >
+          Товары
+        </NavLink>
+
+        <NavLink
+          to="/create/:typeId"
+          style={({ isActive }) =>
+            isActive ? styles.activeLink : styles.link
+          }
+        >
+          Создать товар
+        </NavLink>
+      </nav>
+
+      <div style={styles.right}>
+        {!isAuth ? (
+          <div>
+            <Link to="/login">Логин</Link>
+            daw 
+            <Link to="/register">Регистрация</Link>
+          </div>
+        ) : (
+          <Link to="/users/profile">Профиль</Link>
+        )}
+      </div>
+    </header>
+  );
+}
+
+const styles = {
+  header: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "15px 30px",
+    borderRadius: "10px",
+    borderBottom: "1px solid #222",
+    background: "#0f0f0f",
+  },
+
+  logo: {
+    fontSize: "20px",
+    fontWeight: "bold",
+  },
+
+  logoText: {
+    color: "#fff",
+    textDecoration: "none",
+  },
+
+  nav: {
+    display: "flex",
+    alignItems: "center",
+    gap: "20px",
+  },
+
+  right: {
+    display: "flex",
+    gap: "15px",
+  },
+
+  link: {
+    color: "#aaa",
+    textDecoration: "none",
+    fontSize: "15px",
+  },
+
+  activeLink: {
+    color: "#fff",
+    fontWeight: "bold",
+    textDecoration: "none",
+    borderBottom: "2px solid #fff",
+    paddingBottom: "4px",
+  },
+};
+) это навигация
+(import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../api/axios";
+
+export default function CreateProduct() {
+  const { typeId } = useParams();
+  const navigate = useNavigate();
+
+  const [attributes, setAttributes] = useState([]);
+  const [values, setValues] = useState({});
+  const [price, setPrice] = useState("");
+  const [image, setImage] = useState(null);
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    if (!typeId) return;
+    api.get(`http://127.0.0.1:8000/api/products/attributes/${typeId}/`)
+      .then(res => {
+        console.log("ATTRIBUTES: ", res.data);
+        setAttributes(res.data);
+      })
+      .catch(err => {
+        console.error("ATTR ERROR: ", err);
+      })
+  }, [typeId])
+
+
+  // 2️⃣ Обновление значений
+  const handleChange = (attrId, value) => {
+    setValues(prev => ({
+      ...prev,
+      [attrId]: value
+    }));
+  };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("product_type", typeId);
+    formData.append("price", price);
+    formData.append("description", description);
+
+    if (image) {
+      formData.append("image", image);
+    }
+
+    Object.entries(values).forEach(([attrId, value]) => {
+      formData.append(
+        "attributes",
+        JSON.stringify({
+          attribute: Number(attrId),
+          value: value
+        })
+      );
+    });
+
+    try {
+      await api.post("/products/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      alert("Товар создан");
+      navigate("/");
+    } catch (err) {
+      console.error(err.response?.data || err);
+      alert("Ошибка при создании");
+    }
+  };
+
+  return (
+    <div>
+      <h2>Создание товара</h2>
+
+      <form onSubmit={handleSubmit}>
+        <input
+          type="number"
+          placeholder="Цена"
+          value={price}
+          onChange={e => setPrice(e.target.value)}
+          required
+        />
+
+        <textarea
+          placeholder="Описание"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          required
+        />
+
+        <hr />
+        <label>Фото товара</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
+
+        {attributes.map(attr => (
+          <div key={attr.id}>
+            <label>{attr.name}</label>
+
+
+
+            {attr.field_type === "text" && (
+              <input
+                type="text"
+                onChange={e => handleChange(attr.id, e.target.value)}
+              />
+            )}
+
+            {attr.field_type === "number" && (
+              <input
+                type="number"
+                onChange={e => handleChange(attr.id, e.target.value)}
+              />
+            )}
+
+            {attr.field_type === "boolean" && (
+              <input
+                type="checkbox"
+                onChange={e => handleChange(attr.id, e.target.checked)}
+              />
+            )}
+          </div>
+        ))}
+
+        <button type="submit">Создать</button>
+      </form>
+    </div>
+  );
+}) создание товара
+
+и еще productType.jsx оно нужно или нет или нужно изменить(import { useParams,Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../api/axios";
+
+export default function ProductType(){
+    const {categoryId} = useParams();
+    const[types, setTypes] =useState();
+
+    useEffect(()=>{
+        api.get(`products/types/${categoryId}`)
+            .then(res => setTypes(res.data))
+            .catch(err => console.error(err));
+    }, [categoryId]);
+
+    return(
+        <div>
+            <h2>Типы продуктов</h2>
+
+            {types.map(t =>(
+                <div key={t.id}>
+                    <Link to={`/products/${t.id}`}>
+                        {t.title}
+                    </Link>
+                    {" | "}
+                    <Link to={`/create/${t.id}`}>Создать товар</Link>
+                </div>
+            ))}
+        </div>
+    )
+})

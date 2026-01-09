@@ -14,7 +14,7 @@ export default function CreateProduct() {
 
   useEffect(() => {
     if (!typeId) return;
-    api.get(`http://127.0.0.1:8000/api/products/attributes/${typeId}`)
+    api.get(`http://127.0.0.1:8000/api/products/attributes/${typeId}/`)
       .then(res => {
         console.log("ATTRIBUTES: ", res.data);
         setAttributes(res.data);

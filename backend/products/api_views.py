@@ -8,8 +8,11 @@ from .models import (
     Product,
     ProductAttributeValue
     )
-
 class ProductTypeListView(ListAPIView):
+    queryset = ProductType.objects.all()
+    serializer_class = ProductTypeSerializer
+    
+class ProductIdListView(ListAPIView):
     serializer_class = ProductTypeSerializer
     
     def get_queryset(self):

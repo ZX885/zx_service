@@ -11,7 +11,7 @@ export default function Profile() {
 
         const handleLogout = () =>{
             logout();
-            navigate("/")
+            navigate("/login")
         }
         return <button onClick={handleLogout}>Выйти</button>
     };

@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.urls import path
 from .api_views import (
-    ProductTypeListView,
+    ProductIdListView,
     ProductAttributeView,
+    ProductTypeListView,
     ProductListView,
     ProductListCreateView,
     ProductDetailView,
@@ -11,6 +12,7 @@ from .api_views import (
 urlpatterns = [
     path('', ProductListCreateView.as_view()),  # список продуктов
     path('<int:pk>/', ProductDetailView.as_view()), # детал\ карточка товара
-    path('types/<int:category_id>/', ProductTypeListView.as_view()),
+    path('types/', ProductTypeListView.as_view()),
+    path('types/<int:category_id>/', ProductIdListView.as_view()),
     path('attributes/<int:product_type_id>/', ProductAttributeView.as_view()),
 ]

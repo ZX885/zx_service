@@ -22,7 +22,7 @@ class Profile(models.Model):
     is_admin = models.BooleanField(default=False)
     
     def __str__(self):
-        return f'{self.user.username} Профиль'
+        return f'{self.user.username}'
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

@@ -22,6 +22,7 @@ export default function Products() {
     <div>
       <h2>
         Товары{/*  {products.length >0 && `(${products.length})`} */}
+        
       </h2>
 
       {products.length === 0 && <p>Товаров нет</p>}

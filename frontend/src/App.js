@@ -1,18 +1,18 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navigation";
+
 import Home from "./pages/Home";
 import Games from "./pages/Games";
 import Platforms from "./pages/Platforms";
 import Categories from "./pages/Categories";
-import ProductType from "./pages/ProductTypes";
 import Products from "./pages/Products";
 import CreateProduct from "./pages/CreateProduct";
 import Profile from "./pages/Profile";
 import ProductDetail from "./pages/ProductDetail";
 import MyOrders from "./pages/MyOrders";
 import Login from "./pages/Login";
-// import logo from './logo.svg';
-// import './App.css';
+import Register from "./pages/Register";
+import SelectProductType from "./pages/SelectProductType";
 
 
 function App() {
@@ -28,14 +28,15 @@ function App() {
         {/* список платформ (PUBG, TELEGRAM) */}
         <Route path="catalog/platforms/:rootId" element={<Platforms/>}/>
         {/* Типы товаров */}
-        <Route path="/categories/:categoryId/types" element={<ProductType/>}/>
+        {/* <Route path="/categories/:categoryId/types" element={<ProductType/>}/> */}
         {/*  */}
         <Route path="/games/:gameId/categories" element={<Categories/>}/>
         {/* Товары */}
         <Route path="/products/" element={<Products />}/>
         <Route path="/product/:productId" element={<ProductDetail />}/>
-        <Route path="/products/types/:typeId" element={<Products />}/>
         {/* Создание товара */}
+
+        <Route path="/create/" element={<SelectProductType />}/>
         <Route path="/create/:typeId" element={<CreateProduct />}/>
         
         {/* Создание покупки */}
@@ -45,6 +46,7 @@ function App() {
         <Route path="/users/profile/" element={<Profile />}/>
         {/* Логин */}
         <Route path="/login" element={<Login />}/>
+        <Route path="/register" element={<Register />}/>
 
     
       </Routes>

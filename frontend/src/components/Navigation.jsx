@@ -1,20 +1,9 @@
 import "./style.scss"
-import { Link, NavLink, useNavigate } from "react-router-dom";
-import {logout} from "../utils/auth"
+import { Link, NavLink } from "react-router-dom";
 
 export default function Navbar() {
   const isAuth = !!localStorage.getItem("access")
-  // function LogoutButton(){
-  //   const navigate = useNavigate();
 
-  //   const handleLogout =() =>{
-  //     logout();
-  //     navigate("/login");
-  //   };
-
-  //   return <button onClick={handleLogout}>Выйти</button>
-
-  // }
 
   return (
     <header style={styles.header}>
@@ -50,21 +39,25 @@ export default function Navbar() {
         >
           Товары
         </NavLink>
-
         <NavLink
-          to="/create/5"
+          to="/create"
           style={({ isActive }) =>
             isActive ? styles.activeLink : styles.link
           }
         >
           Создать товар
         </NavLink>
+
       </nav>
 
       <div style={styles.right}>
         {!isAuth ? (
-          <Link to="/login">Логин</Link>
-        ):(
+          <div>
+            <Link to="/login">Логин</Link>
+            daw 
+            <Link to="/register">Регистрация</Link>
+          </div>
+        ) : (
           <Link to="/users/profile">Профиль</Link>
         )}
       </div>
@@ -76,7 +69,6 @@ const styles = {
   header: {
     display: "flex",
     justifyContent: "center",
-    alignItems: "center",
     alignItems: "center",
     padding: "15px 30px",
     borderRadius: "10px",
