@@ -1,20 +1,20 @@
 
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-import { useNavigate } from "react-router-dom";
-import { logout } from "../utils/auth"
+// import { useNavigate } from "react-router-dom";
+// import { logout } from "../utils/auth"
 
 export default function Profile() {
     const [user, setUser] = useState(null);
-    function LogoutButton (){
-        const navigate = useNavigate();
+    // function LogoutButton (){
+    //     const navigate = useNavigate();
 
-        const handleLogout = () =>{
-            logout();
-            navigate("/login")
-        }
-        return <button onClick={handleLogout}>Выйти</button>
-    };
+    //     const handleLogout = () =>{
+    //         logout();
+    //         navigate("/login")
+    //     }
+    //     return <button onClick={handleLogout}>Выйти</button>
+    // };
 
     useEffect(() => {
         api.get("users/profile/")
@@ -39,7 +39,7 @@ export default function Profile() {
             </div>
 
 
-            <LogoutButton />
+            {/* <LogoutButton /> */}
         </div>
     )
 }

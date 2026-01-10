@@ -57,7 +57,7 @@ export default function CreateProduct() {
     });
 
     try {
-      await api.post("/products/", formData, {
+      await api.post("/products/create/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

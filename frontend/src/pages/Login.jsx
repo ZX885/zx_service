@@ -1,5 +1,5 @@
 import "./css/login_style.scss"
-import axios from "axios";
+import { useAuth } from "../conext/AuthContext";
 import api from "../api/axios"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
@@ -9,6 +9,7 @@ export default function Login() {
     const [username, SetUsername] = useState("");
     const [password, SetPassword] = useState("");
     const navigate = useNavigate()
+    const login = useAuth()
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -18,10 +19,11 @@ export default function Login() {
                 password,
             });
 
-            localStorage.setItem("access", res.data.access);
-            localStorage.setItem("refresh", res.data.refresh);
+            // localStorage.setItem("access", res.data.access);
+            // localStorage.setItem("refresh", res.data.refresh);
+            login(res.data.access, res.data.refresh);
 
-            navigate("/");
+            navigate("/users/profile");
         } catch (err) {
             alert("Неверный логин или пароль");
         }

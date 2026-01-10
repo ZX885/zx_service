@@ -10,7 +10,8 @@ from .api_views import (
 )
 
 urlpatterns = [
-    path('', ProductListCreateView.as_view()),  # список продуктов
+    path('', ProductListView.as_view()),  # список продуктов
+    path('/create', ProductListCreateView.as_view()),  # список продуктов
     path('<int:pk>/', ProductDetailView.as_view()), # детал\ карточка товара
     path('types/', ProductTypeListView.as_view()),
     path('types/<int:category_id>/', ProductIdListView.as_view()),

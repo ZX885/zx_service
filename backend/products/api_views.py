@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
 from .serializers import ProductAttributeSerializer, ProductTypeSerializer, ProductSerializer
 from .models import (
     ProductAttribute,
@@ -20,6 +20,7 @@ class ProductIdListView(ListAPIView):
         return ProductType.objects.filter(category_id=category_id)
 
 class ProductListView(ListAPIView):
+    queryset = Product.objects.all()
     serializer_class = ProductSerializer
     
     def get_queryset(self):
@@ -41,13 +42,18 @@ class ProductAttributeView(ListAPIView):
             product_type_id=product_type_id
             )
     
-class ProductListCreateView(ListCreateAPIView):
-    queryset = Product.objects.all()
+class ProductListCreateView(CreateAPIView):
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
     
-    def perform_create(self, serializer):
-        serializer.save(seller=self.request.user.profile)
+    def get_serializer_context(self):
+        # context = super().get_serializer_context()
+        # context["request"] = self.request
+        return {"request" : self.request}
+    
+    
+    # def perform_create(self, serializer):
+    #     serializer.save(seller=self.request.user.profile)
     
 
 class ProductDetailView(RetrieveAPIView):

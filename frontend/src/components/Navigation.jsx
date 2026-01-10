@@ -1,8 +1,9 @@
+import { useAuth } from "../conext/AuthContext";
 import "./style.scss"
 import { Link, NavLink } from "react-router-dom";
 
 export default function Navbar() {
-  const isAuth = !!localStorage.getItem("access")
+  const { isAuth, logout } = useAuth();
 
 
   return (
@@ -31,27 +32,37 @@ export default function Navbar() {
         >
           Товары
         </NavLink>
-        <NavLink
-          to="/create/root"
-          style={({ isActive }) =>
-            isActive ? styles.activeLink : styles.link
-          }
-        >
-          Создать товар
-        </NavLink>
-
       </nav>
 
       <div style={styles.right}>
-        {!isAuth ? (
+        {isAuth ? (
+          <>
+            <NavLink
+              to="/create/root"
+              style={({ isActive }) =>
+                isActive ? styles.activeLink : styles.link
+              }
+            >
+              Создать товар
+            </NavLink>
+            <Link to="/users/profile">Профиль</Link>
+            <button onClick={logout}>Выйти</button>
+          </>
+        ) : (
+          <>
+            <Link to={"/login"}>Войти</Link>
+            <Link to={"/register"}>Регистрация</Link>
+          </>
+        )}
+        {/* {!isAuth ? (
           <div>
             <Link to="/login">Логин</Link>
-            daw 
+            daw
             <Link to="/register">Регистрация</Link>
           </div>
         ) : (
           <Link to="/users/profile">Профиль</Link>
-        )}
+        )} */}
       </div>
     </header>
   );

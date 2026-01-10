@@ -27,7 +27,7 @@ class MyOrderView(ListAPIView):
     permission_classes= [IsAuthenticated]
     
     def get_queryset(self):
-        return Order.objects.filter(buyer=self.request.user)
+        return Order.objects.filter(buyer=self.request.user.profile)
     
 class OrderDetailView(RetrieveAPIView):
     serialier_class = OrderSerializer

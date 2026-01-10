@@ -19,7 +19,7 @@ class ProductAttributeValueSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'value']
 
 class ProductSerializer(serializers.ModelSerializer):
-    seller = serializers.StringRelatedField(read_only=True)
+    # seller = serializers.StringRelatedField(read_only=True)
     attributes = ProductAttributeValueSerializer(
         many=True,
         read_only=True
@@ -30,15 +30,26 @@ class ProductSerializer(serializers.ModelSerializer):
             'id',
             'product_type',
             'price',
-            'seller',
             'description',
             'image',
             'attributes',
             'created_at'
             ]
-        read_only_fields = ['seller']
+        # read_only_fields = ['seller']
     
-    # def create(self, validation_data):
-    #     request = self.context["seller"]
-    #     validation_data["seller"] = request.user
-    #     return super().create(validation_data)
+    def create(self, validation_data):
+        attributes_data = validation_data.pop("attributes", [])
+        request = self.context["request"]
+        
+        product = Product.objects.create(
+            seller=request.user.profile,
+            **validation_data
+        )
+        
+        for attr in attributes_data:
+            ProductAttributeValue.objects.create(
+                product=product,
+                attribute=attr["attribute"],
+                value=attr["value"]
+            )
+        return product
