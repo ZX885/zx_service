@@ -2,8 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navigation";
 
 import Home from "./pages/Home";
-import Games from "./pages/Games";
-import Platforms from "./pages/Platforms";
+// import Games from "./pages/Games";
+// import Platforms from "./pages/Platforms";
 import Categories from "./pages/Categories";
 import Products from "./pages/Products";
 import CreateProduct from "./pages/CreateProduct";
@@ -12,7 +12,10 @@ import ProductDetail from "./pages/ProductDetail";
 import MyOrders from "./pages/MyOrders";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import SelectRoot from "./pages/SelectRoot";
 import SelectProductType from "./pages/SelectProductType";
+import SelectCategory from "./pages/SelectCategory";
+import SelectPlatform from "./pages/SelectPlatform";
 
 
 function App() {
@@ -23,21 +26,19 @@ function App() {
       <Routes>
         {/* Главная */}
         <Route path="/" element={<Home/>}/>
-        {/* категории платформ */}
-        <Route path={`/catalog`} element={<Games/>}/>
-        {/* список платформ (PUBG, TELEGRAM) */}
-        <Route path="catalog/platforms/:rootId" element={<Platforms/>}/>
-        {/* Типы товаров */}
-        {/* <Route path="/categories/:categoryId/types" element={<ProductType/>}/> */}
-        {/*  */}
+
         <Route path="/games/:gameId/categories" element={<Categories/>}/>
         {/* Товары */}
         <Route path="/products/" element={<Products />}/>
         <Route path="/product/:productId" element={<ProductDetail />}/>
-        {/* Создание товара */}
 
-        <Route path="/create/" element={<SelectProductType />}/>
-        <Route path="/create/:typeId" element={<CreateProduct />}/>
+        {/* Создание товара */}
+        <Route path="/create/root" element={<SelectRoot />}/>
+        {/* список платформ (PUBG, TELEGRAM) */}
+        <Route path="/create/platforms/:rootId" element={<SelectPlatform />}/>
+        <Route path="/create/categories/:platformId" element={<SelectCategory />}/>
+        <Route path="/create/type/:categoryId" element={<SelectProductType />}/>
+        <Route path="/create/product/:typeId" element={<CreateProduct />}/>
         
         {/* Создание покупки */}
         <Route path="/orders" element={<MyOrders />}/>

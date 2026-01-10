@@ -14,14 +14,6 @@ export default function Navbar() {
       </div>
 
       <nav style={styles.nav}>
-        <NavLink
-          to="/catalog"
-          style={({ isActive }) =>
-            isActive ? styles.activeLink : styles.link
-          }
-        >
-          Платформы
-        </NavLink>
 
         <NavLink
           to="/orders"
@@ -40,7 +32,7 @@ export default function Navbar() {
           Товары
         </NavLink>
         <NavLink
-          to="/create"
+          to="/create/root"
           style={({ isActive }) =>
             isActive ? styles.activeLink : styles.link
           }
