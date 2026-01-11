@@ -4,11 +4,15 @@
 
     .card{
         text-align: center;
-        max-width: 200px;
-        
-        a{
-            text-decoration: none;
+        max-width: 300px;
+        .button{
             color: aliceblue;
+            background-color: rgba(0, 0, 0, 0);
+            border-style: none;
+            font-size: 32px;
+            padding: 60px;
+            cursor: pointer;
+            
         }
     }
 

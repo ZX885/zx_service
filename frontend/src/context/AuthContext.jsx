@@ -8,13 +8,14 @@ export function AuthProvider({ children }) {
     useEffect(() => {
         const token = localStorage.getItem("access");
         setIsAuth(!!token);
-    }, [])
+    }, []);
 
     const login = (access, refresh) => {
-        localStorage.setItem("access");
-        localStorage.setItem("refresh");
+        localStorage.setItem("access", access);
+        localStorage.setItem("refresh", refresh);
         setIsAuth(true);
     };
+
     const logout = () => {
         localStorage.removeItem("access");
         localStorage.removeItem("refresh");
@@ -22,15 +23,10 @@ export function AuthProvider({ children }) {
     };
 
     return (
-        <div>
-            <AuthContext.Provider value={{isAuth, login, logout}}>
-                {children}
-            </AuthContext.Provider>
-        </div>
+        <AuthContext.Provider value={{ isAuth, login, logout }}>
+            {children}
+        </AuthContext.Provider>
     );
-
 }
 
-export function  useAuth(){
-    return useContext(AuthContext);
-}
+export const useAuth = () => useContext(AuthContext)

@@ -6,7 +6,7 @@ export default function MyOrders() {
 
     useEffect(() =>{
         api.get("/orders/my/")
-        .then(res => res.data)
+        .then(res => setOrders(res.data))
         .catch(console.error);
     }, [])
 
@@ -16,6 +16,7 @@ export default function MyOrders() {
 
             {orders.map(o =>(
                 <div key={o.id}>
+                    <img src={o.image} alt="" />
                     <p>Товар: {o.product}</p>
                     <p>Цена: {o.price}</p>
                     <p>Статус: {o.status}</p>

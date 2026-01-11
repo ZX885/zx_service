@@ -1,3 +1,4 @@
+import "./css/selectcategory.scss"
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import api from "../api/axios";
@@ -18,15 +19,17 @@ export default function SelectCategory() {
     return (
         <div>
             <h2>Выберите Категорию</h2>
-
-            {category.map(c => (
-                <button
-                    key={c.id}
-                    onClick={() => navigate(`/create/type/${c.id}`)}
-                >
-                    {c.title}
-                </button>
-            ))}
+            <div className="wrapper">
+                {category.map(c => (
+                    <button
+                        className="button"
+                        key={c.id}
+                        onClick={() => navigate(`/create/type/${c.id}`)}
+                    >
+                        {c.title}
+                    </button>
+                ))}
+            </div>
 
         </div>
     )

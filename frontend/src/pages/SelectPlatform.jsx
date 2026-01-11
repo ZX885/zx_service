@@ -1,3 +1,4 @@
+import './css/platforms.scss'
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../api/axios";
@@ -17,15 +18,16 @@ export default function SelectPlatform() {
     return (
         <div>
             <h2>Выберите платформу</h2>
-
-            {platforms.map(p => (
-                <button
-                    key={p.id}
-                    onClick={() => navigate(`/create/categories/${p.id}`)}
-                >
-                    {p.title}
-                </button>
-            ))}
+            <div className='plat'>
+                {platforms.map(p => (
+                    <div key={p.id}>
+                        <img
+                            onClick={() => navigate(`/create/categories/${p.id}`)}
+                            className="plat_img"
+                            src={p.image} alt="" />
+                    </div>
+                ))}
+            </div>
 
         </div>
     )

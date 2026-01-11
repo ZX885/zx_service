@@ -15,6 +15,7 @@ body {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000", endColorstr="#032E57", GradientType=0);
   background-repeat: no-repeat;
   color: aliceblue;
+  transition: 0.5s;
 }
 
 code {

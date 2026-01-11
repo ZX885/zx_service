@@ -5,5 +5,10 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields ="__all__"
-        read_only_fields= ("buyer", "status", "created_at")
+        read_only_fields= (
+                "buyer",
+                "status",
+                "price",
+                "product",
+                "created_at")
         

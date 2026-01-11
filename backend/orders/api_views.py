@@ -13,17 +13,18 @@ class CreateOrderView(CreateAPIView):
     permission_classes = [IsAuthenticated]
     
     def perform_create(self, serializer):
-        product_id = self.  request.data.get("product_id")
-        product =   Product.objects.get(id=product_id)
+        product_id = self.request.data.get("product_id")
+        product = Product.objects.get(id=product_id)
         
         serializer.save(
-            buyer=self.request.user,
+            buyer=self.request.user.profile,
             product=product,
             price=product.price
         )
     
 class MyOrderView(ListAPIView):
-    serialier_class = OrderSerializer
+    queryset =Order.objects.all()
+    serializer_class = OrderSerializer
     permission_classes= [IsAuthenticated]
     
     def get_queryset(self):

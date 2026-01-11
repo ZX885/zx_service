@@ -1,4 +1,4 @@
-import { useAuth } from "../conext/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import "./style.scss"
 import { Link, NavLink } from "react-router-dom";
 
@@ -36,7 +36,7 @@ export default function Navbar() {
 
       <div style={styles.right}>
         {isAuth ? (
-          <>
+          <div className="nava">
             <NavLink
               to="/create/root"
               style={({ isActive }) =>
@@ -45,9 +45,9 @@ export default function Navbar() {
             >
               Создать товар
             </NavLink>
-            <Link to="/users/profile">Профиль</Link>
-            <button onClick={logout}>Выйти</button>
-          </>
+            <Link className="profile" to="/users/profile">Профиль</Link>
+            <button className="logout" onClick={logout}>Выйти</button>
+          </div>
         ) : (
           <>
             <Link to={"/login"}>Войти</Link>

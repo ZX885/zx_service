@@ -1,7 +1,80 @@
-.nav{
-    padding: 20px;
-    border-bottom: 1px solid #ccc;
-}
-header{
+header {
+    text-align: center;
+
+    .nav {
+        padding: 20px;
+        border-bottom: 1px solid #ccc;
+    }
+
     gap: 50px;
+
+    .nava {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .profile {
+            background-image: linear-gradient(to right, #000046 0%, #1CB5E0 51%, #000046 100%);
+            margin: 10px;
+            padding: 15px 20px;
+            // text-transform: uppercase;
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white;
+            // box-shadow: 0 0 20px #eee;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .profile:hover {
+            background-position: right center;
+            /* change the direction of the change here */
+            color: #fff;
+            text-decoration: none;
+        }
+        .logout {
+            background-image: linear-gradient(to right, #430101 0%, #d62828 51%, #9b0202 100%);
+            margin: 10px;
+            padding: 19px 30px;
+            // text-transform: uppercase;
+            transition: 0.5s;
+            background-size: 200% auto;
+            color: white;
+            // box-shadow: 0 0 20px #eee;
+            border-radius: 10px;
+            display: block;
+        }
+
+        .logout:hover {
+            background-position: right center;
+            /* change the direction of the change here */
+            color: #fff;
+            text-decoration: none;
+        }
+
+        // .logout {
+        //     background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
+        //     border-radius: 12px;
+        //     color: #FFFFFF;
+        //     cursor: pointer;
+        //     display: inline-block;
+        //     font-family: -apple-system, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        //     transition: box-shadow .2s ease-in-out;
+        //     outline: transparent;
+        //     text-align: center;
+        //     text-decoration: none;
+        //     touch-action: manipulation;
+        //     white-space: nowrap;
+        //     padding: 15px 20px;
+
+        // }
+
+        // .logout:not([disabled]):focus {
+        //     box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+        // }
+
+        // .logout:not([disabled]):hover {
+        //     box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+        // }
+    }
 }

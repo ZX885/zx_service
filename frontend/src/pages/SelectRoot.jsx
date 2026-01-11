@@ -1,3 +1,4 @@
+import './css/game_style.scss'
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
@@ -16,14 +17,19 @@ export default function SelectRoot() {
         <div>
 
             <h2>Выберите раздел</h2>
-            {roots.map(r => (
-                <button
-                    key={r.id}
-                    onClick={() => navigate(`/create/platforms/${r.id}`)}
-                >
-                    {r.title}
-                </button>
-            ))}
+            <div className='game_wr'>
+                {roots.map(r => (
+                    <div className='card'>
+                        <button
+                        className='button'
+                            key={r.id}
+                            onClick={() => navigate(`/create/platforms/${r.id}`)}
+                        >
+                            {r.title}
+                        </button>
+                    </div>
+                ))}
+            </div>
 
         </div>
     )
