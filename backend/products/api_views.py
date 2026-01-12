@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.generics import ListAPIView,DestroyAPIView, ListCreateAPIView, RetrieveAPIView
 from .serializers import ProductAttributeSerializer, ProductTypeSerializer, ProductSerializer
 from .models import (
     ProductAttribute,
@@ -19,7 +20,7 @@ class ProductIdListView(ListAPIView):
         category_id = self.kwargs['category_id']
         return ProductType.objects.filter(category_id=category_id)
 
-class ProductListView(ListAPIView):
+class ProductListView(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     
@@ -29,9 +30,7 @@ class ProductListView(ListAPIView):
         if product_type:
             qs = qs.filter(product_type_id=product_type)
         return qs
-        # return Product.objects.filter(product_type_id=product_type_id, is_active=True)
-    
-    
+
 
 class ProductAttributeView(ListAPIView):
     serializer_class = ProductAttributeSerializer
@@ -42,21 +41,27 @@ class ProductAttributeView(ListAPIView):
             product_type_id=product_type_id
             )
     
-class ProductListCreateView(CreateAPIView):
-    serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
-    
-    def get_serializer_context(self):
-        # context = super().get_serializer_context()
-        # context["request"] = self.request
-        return {"request" : self.request}
-    
-    
-    # def perform_create(self, serializer):
-    #     serializer.save(seller=self.request.user.profile)
-    
-
 class ProductDetailView(RetrieveAPIView):
     queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
     
+    
+class MyProductView(ListAPIView):
+    serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Product.objects.filter(
+            seller=self.request.user.profile,
+            is_active=True
+        )
+        
+class ProductDeleteView(DestroyAPIView):
+    queryset= Product.objects.all()
+    permission_classes = [IsAuthenticated]
+    
+    def perform_destroy(self, instance):
+        if instance.seller != self.request.user.profile:
+            raise PermissionDenied("Не ваш товар")
+        # instance.is_active=False
+        instance.delete()
