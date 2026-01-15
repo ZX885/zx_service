@@ -60,7 +60,7 @@ export default function Profile() {
                         </Link>
                         <p>Цена: {p.price}</p>
                         <button onClick={()=>deleteProduct(p.id)}>Удалить</button>
-                        <Link to={`/products/edit/${p.id}`}> Редактировать</Link>
+                        <Link to={`/products/${p.id}/edit`}> Редактировать</Link>
                     </div>
                 ))}
             </div>

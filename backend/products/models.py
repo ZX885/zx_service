@@ -57,14 +57,15 @@ class Product(models.Model):
 class ProductAttributeValue(models.Model):
     product = models.ForeignKey(
             Product, 
+            related_name="attribute_values",
             on_delete=models.CASCADE,
-            related_name="attributes"
         )
     attribute = models.ForeignKey(
         ProductAttribute, 
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name="attribute"
     )
-    value = models.TextField()
+    value = models.TextField(max_length=255)
     
     def __str__(self):
         return f"{self.product.id} | {self.attribute.name}: {self.value}"

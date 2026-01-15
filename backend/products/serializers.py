@@ -12,44 +12,84 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         fields = ['id', 'category', 'title']
 
 class ProductAttributeValueSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source="attribute.name")
+    attribute = serializers.StringRelatedField()
     
     class Meta:
         model = ProductAttributeValue
-        fields = ['id', 'name', 'value']
+        fields = ['id', 'attribute', 'value']
 
 class ProductSerializer(serializers.ModelSerializer):
-    # seller = serializers.StringRelatedField(read_only=True)
-    attributes = ProductAttributeValueSerializer(
+    attribute_values = ProductAttributeValueSerializer(
         many=True,
         read_only=True
     )
     class Meta:
         model = Product
-        fields= [
+        fields = [
             'id',
             'product_type',
             'price',
             'description',
             'image',
-            'attributes',
-            'created_at'
-            ]
-        # read_only_fields = ['seller']
-    
-    def create(self, validation_data):
-        attributes_data = validation_data.pop("attributes", [])
-        request = self.context["request"]
-        
-        product = Product.objects.create(
+            'attribute_values',
+            'created_at',
+        ]
+
+    def create(self, validated_data):
+        request = self.context['request']
+
+        # 🔽 получаем атрибуты
+        attributes_data = validated_data.pop('attribute_values', [])
+        product =Product.objects.create(
             seller=request.user.profile,
-            **validation_data
+            **validated_data
         )
-        
+        # 🔽 если пришли строкой (FormData)
+        if isinstance(attributes_data, str):
+            attributes_data = json.loads(attributes_data)
+
+        # 🔽 СОЗДАЁМ attribute_values
         for attr in attributes_data:
             ProductAttributeValue.objects.create(
                 product=product,
-                attribute=attr["attribute"],
-                value=attr["value"]
+                attribute_id=attr['attribute'],
+                value=attr['value']
             )
+        print(self.initial_data.get("attribute_values"))
         return product
+    
+class ProductUpdateSerializer(serializers.ModelSerializer):
+    attribute_values = ProductAttributeValueSerializer(
+        many=True,
+        read_only=True
+    )
+
+    class Meta:
+        model = Product
+        fields = (
+            "id",
+            "price",
+            "description",
+            "image",
+            "is_active",
+            "attribute_values",
+        )
+
+    def update(self, instance, validated_data):
+        request= self.context["request"]
+        attrs_data = validated_data.pop("attribute_values", [])
+
+        # обновляем обычные поля продукта
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # обновляем атрибуты
+        for attr_data in attrs_data:
+            ProductAttributeValue.objects.update_or_create(
+                product=instance,
+                attribute_id=attr_data["attribute"],
+                defaults={"value": attr_data["value"]},
+            )
+
+        return instance

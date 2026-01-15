@@ -5,7 +5,7 @@ import api from "../api/axios";
 
 export default function ProductDetail() {
     const { productId } = useParams();
-    const [product, setProduct] = useState(null);
+    const [product, setProduct] = useState([]);
 
     const buyProduct = async () => {
         try {
@@ -21,7 +21,7 @@ export default function ProductDetail() {
     };
 
     useEffect(() => {
-        api.get(`/products/${productId}`)
+        api.get(`/products/${productId}/`)
             .then(res => setProduct(res.data))
             .catch(err => console.error(err));
     }, [productId]);
@@ -49,11 +49,15 @@ export default function ProductDetail() {
                     <h3>Характеристики</h3>
 
                     <ul>
-                        {product.attributes.map((attr, i) => (
-                            <li key={i}>
-                                {attr.name}: {String(attr.value)}
-                            </li>
-                        ))}
+                        {product.attributes?.length > 0 ? (
+                            product.attributes.map(attr => (
+                                <p key={attr.id}>
+                                    <b>{attr.attribute}</b>: {attr.value}
+                                </p>
+                            ))
+                        ) : (
+                            <p>Атрибутов нет</p>
+                        )}
                     </ul>
                 </div>
             </div>

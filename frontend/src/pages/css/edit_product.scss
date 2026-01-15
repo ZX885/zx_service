@@ -1,0 +1,36 @@
+
+
+.card{
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    
+    .card-basic{
+        display: flex;
+        margin: 20px;
+        gap: 100px;
+        div{
+            display: grid;
+
+            input, textarea{
+                margin: 10px;
+                padding: 10px;
+                border: none;
+                color: aliceblue;
+                font-size: 24px;
+                border-radius: 10px;
+                background-color: rgba(128, 128, 128, 0.413);
+            }
+        }
+    }
+
+    .button{
+        color: aliceblue;
+        // padding: 20px;
+        width: 100px;
+        height: 40px;
+        border: none;
+        border-radius: 10px;
+        background: rgba(5, 228, 102, 0.693);
+    }
+}

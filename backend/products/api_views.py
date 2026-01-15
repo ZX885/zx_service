@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.generics import ListAPIView,DestroyAPIView, ListCreateAPIView, RetrieveAPIView
-from .serializers import ProductAttributeSerializer, ProductTypeSerializer, ProductSerializer
+from rest_framework.generics import ListAPIView,DestroyAPIView,RetrieveUpdateAPIView, ListCreateAPIView, RetrieveAPIView
+from .serializers import ProductUpdateSerializer, ProductAttributeSerializer, ProductTypeSerializer, ProductSerializer
 from .models import (
     ProductAttribute,
     ProductType,
@@ -42,8 +42,11 @@ class ProductAttributeView(ListAPIView):
             )
     
 class ProductDetailView(RetrieveAPIView):
-    queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
+    queryset = Product.objects.filter(is_active=True).prefetch_related(
+        "attribute_values__attribute"
+    )
+    
     
     
 class MyProductView(ListAPIView):
@@ -57,11 +60,27 @@ class MyProductView(ListAPIView):
         )
         
 class ProductDeleteView(DestroyAPIView):
-    queryset= Product.objects.all()
     permission_classes = [IsAuthenticated]
+    queryset= Product.objects.all()
     
     def perform_destroy(self, instance):
         if instance.seller != self.request.user.profile:
             raise PermissionDenied("Не ваш товар")
-        # instance.is_active=False
         instance.delete()
+        
+class ProductUpdateView(RetrieveUpdateAPIView):
+    serializer_class = ProductUpdateSerializer
+    permission_classes = [IsAuthenticated]
+    queryset =Product.objects.prefetch_related(
+        "attribute_values__attribute"
+    )
+    
+    def get_serializer_context(self):
+        return {"request" : self.request}
+        
+    def get_object(self):
+        obj = super().get_object()
+        if obj.seller != self.request.user.profile:
+            raise PermissionDenied("Не ваш товар")
+        return obj
+        # return Product.objects.filter(seller=self.request.user.profile)
