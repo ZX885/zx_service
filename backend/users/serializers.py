@@ -1,17 +1,33 @@
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from .models import Profile
 
-class UserSerializer(serializers.ModelSerializer):
+class ProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(
+        source="user.username",
+        read_only=True
+    )
     class Meta:
-        model = User
-        fields = (
+        model = Profile
+        fields = [
             "id",
             "username",
-            "email",
-            # "image",
-            "is_staff"
-        )
+            # "email",
+            # "is_staff",
+            
+            "balance",
+            "created_at",
+            "frozen_balance",
+            "is_verified",
+        ]
+        
+        read_only_fields = [
+            "balance",
+            "frozen_balance",
+            "is_verified",
+            "created_at",
+        ]
 
 
 class MyTokenSerializer(TokenObtainPairSerializer):
@@ -29,3 +45,8 @@ class MyTokenSerializer(TokenObtainPairSerializer):
         # data['is_seller'] = self.user.is_seller
         # data['username'] = self.user.username
         return data
+    
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = []

@@ -1,5 +1,5 @@
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import MyTokenSerializer, UserSerializer
+from .serializers import MyTokenSerializer, ProfileSerializer
 from rest_framework.views import APIView
 from django.contrib.auth.models import User
 from rest_framework.response import Response
@@ -34,6 +34,15 @@ class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request):
-        serializer = UserSerializer(request.user)
+        serializer = ProfileSerializer(request.user.profile)
         return Response(serializer.data)
     
+    def patch(self, request):
+        serializer = ProfileUpdateSerializer(
+            request.user.profile,
+            data=request.data,
+            partial=True
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(ProfileUpdateSerializer(request.user.profile).data)

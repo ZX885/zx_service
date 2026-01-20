@@ -3,14 +3,16 @@
     grid-template-columns: repeat(2, 2fr);
 
     .card{
-        text-align: center;
+        display: flex;
+        justify-content: center;
         max-width: 300px;
+        padding: 40px 20px;
+        cursor: pointer;
         .button{
             color: aliceblue;
             background-color: rgba(0, 0, 0, 0);
             border-style: none;
             font-size: 32px;
-            padding: 60px;
             cursor: pointer;
             
         }

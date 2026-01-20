@@ -21,7 +21,7 @@ export default function SelectRoot() {
                 {roots.map(r => (
                     <div className='card'>
                         <button
-                        className='button'
+                            className='button'
                             key={r.id}
                             onClick={() => navigate(`/create/platforms/${r.id}`)}
                         >

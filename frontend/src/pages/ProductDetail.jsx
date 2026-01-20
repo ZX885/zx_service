@@ -22,7 +22,10 @@ export default function ProductDetail() {
 
     useEffect(() => {
         api.get(`/products/${productId}/`)
-            .then(res => setProduct(res.data))
+            .then(res => {
+                console.log("PODUCT DATA", res.data);
+                setProduct(res.data)
+            })
             .catch(err => console.error(err));
     }, [productId]);
 
@@ -49,8 +52,8 @@ export default function ProductDetail() {
                     <h3>Характеристики</h3>
 
                     <ul>
-                        {product.attributes?.length > 0 ? (
-                            product.attributes.map(attr => (
+                        {product.attribute_values?.length > 0 ? (
+                            product.attribute_values.map(attr => (
                                 <p key={attr.id}>
                                     <b>{attr.attribute}</b>: {attr.value}
                                 </p>

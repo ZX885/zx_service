@@ -1,5 +1,6 @@
 from .models import ProductAttribute, ProductType,ProductAttributeValue,Product
 from rest_framework import serializers
+import json
 
 class ProductAttributeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,27 +36,55 @@ class ProductSerializer(serializers.ModelSerializer):
             'created_at',
         ]
 
+    # def create(self, validated_data):
+    #     request = self.context['request']
+
+    #     # 🔽 получаем атрибуты
+    #     attributes_data = validated_data.pop("attribute_values", [])
+    #     product =Product.objects.create(
+    #         seller=request.user.profile,
+    #         **validated_data
+    #     )
+    #     # 🔽 если пришли строкой (FormData)
+    #     if isinstance(attributes_data, str):
+    #         attributes_data = json.loads(attributes_data)
+
+    #     # 🔽 СОЗДАЁМ attribute_values
+    #     for attr in attributes_data:
+    #         ProductAttributeValue.objects.create(
+    #             product=product,
+    #             attribute_id=attr['attribute'],
+    #             value=attr['value']
+    #         )
+    #     print(self.initial_data.get("attribute_values"))
+    #     return product
+    
     def create(self, validated_data):
         request = self.context['request']
 
-        # 🔽 получаем атрибуты
-        attributes_data = validated_data.pop('attribute_values', [])
-        product =Product.objects.create(
+        product = Product.objects.create(
             seller=request.user.profile,
             **validated_data
         )
-        # 🔽 если пришли строкой (FormData)
-        if isinstance(attributes_data, str):
-            attributes_data = json.loads(attributes_data)
 
-        # 🔽 СОЗДАЁМ attribute_values
-        for attr in attributes_data:
-            ProductAttributeValue.objects.create(
-                product=product,
-                attribute_id=attr['attribute'],
-                value=attr['value']
-            )
-        print(self.initial_data.get("attribute_values"))
+        # 🔥 КЛЮЧЕВОЙ МОМЕНТ
+        raw_attrs = request.data.get("attribute_values")
+
+        if raw_attrs:
+            try:
+                attrs = json.loads(raw_attrs)
+            except json.JSONDecodeError:
+                raise serializers.ValidationError(
+                    {"attribute_values": "Неверный формат JSON"}
+                )
+
+            for attr in attrs:
+                ProductAttributeValue.objects.create(
+                    product=product,
+                    attribute_id=attr["attribute"],
+                    value=attr["value"]
+                )
+
         return product
     
 class ProductUpdateSerializer(serializers.ModelSerializer):

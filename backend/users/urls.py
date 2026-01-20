@@ -6,8 +6,6 @@ from .api_views import *
 
 urlpatterns = [
     path("register/", register),
-    # path("login/", login_view, name='login'),
-    # path("logout/", logout_view, name='logout'),
     path("profile/", ProfileView.as_view(), name='profile'),
     
     path("token/", MyTokenObtainPairView.as_view(), name="token"),

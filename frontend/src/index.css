@@ -16,6 +16,7 @@ body {
   background-repeat: no-repeat;
   color: aliceblue;
   transition: 0.5s;
+  font-family: Phantomsans, sans-serif;
 }
 
 code {

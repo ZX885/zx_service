@@ -48,7 +48,7 @@ export default function EditProduct() {
     return (
         <form onSubmit={handleSubmit}>
             <h2>Редактировать товар</h2>
-            <div className="card">
+            <div className="cards">
                 <div className="card-basic">
 
                     <input
@@ -73,7 +73,7 @@ export default function EditProduct() {
                 </div>
                 {attributes.map((attr, i) => (
                     <div key={attr.id}>
-                        <label>{attr.attribute.name}</label>
+                        <label>{attr.attribute}</label>
                         <input
                             value={attr.value}
                             onChange={e => {

@@ -6,45 +6,25 @@
 //   const { typeId } = useParams();
 //   const navigate = useNavigate();
 
+//   const [attributes, setAttributes] = useState([]);
+//   const [values, setValues] = useState({});
 //   const [price, setPrice] = useState("");
-//   const [description, setDescription] = useState("");
 //   const [image, setImage] = useState(null);
+//   const [description, setDescription] = useState("");
 
-//   // ⬅️ здесь будут атрибуты + их значения
-//   const [attributeValues, setAttributeValues] = useState([]);
-
-//   // 1️⃣ Загружаем атрибуты для типа продукта
 //   useEffect(() => {
-//     if (!typeId) return;
-
 //     api.get(`/products/attributes/${typeId}/`)
-//       .then(res => {
-//         // приводим к формату, который ждёт backend
-//         const prepared = res.data.map(attr => ({
-//           attribute: attr.id,   // ID атрибута
-//           name: attr.name,      // для UI
-//           field_type: attr.field_type,
-//           value: ""             // значение, которое введёт юзер
-//         }));
-
-//         setAttributeValues(prepared);
-//       })
-//       .catch(err => {
-//         console.error("Ошибка загрузки атрибутов", err);
-//       });
+//       .then(res => setAttributes(res.data))
+//       .catch(err => console.error(err));
 //   }, [typeId]);
 
-//   // 2️⃣ Изменение значения атрибута
-//   const handleAttributeChange = (index, newValue) => {
-//     const copy = [...attributeValues];
-//     copy[index] = {
-//       ...copy[index],
-//       value: newValue
-//     };
-//     setAttributeValues(copy);
+//   const handleChange = (attrId, value) => {
+//     setValues(prev => ({
+//       ...prev,
+//       [attrId]: value
+//     }));
 //   };
 
-//   // 3️⃣ Отправка формы
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
 
@@ -57,24 +37,21 @@
 //       formData.append("image", image);
 //     }
 
-//     // ⬅️ КЛЮЧЕВОЙ МОМЕНТ
-//     formData.append(
-//       "attribute_values",
-//       JSON.stringify(attributeValues));
+//     const attributeValues = Object.entries(values).map(
+//       ([attrId, value]) => ({
+//         attribute: attrId,
+//         value: value
+//       })
+//     );
 
-//     try {
-//       await api.post("/products/", formData, {
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//         },
-//       });
+//     formData.append("attribute_values", JSON.stringify(attributeValues));
 
-//       alert("Товар создан");
-//       navigate("/");
-//     } catch (err) {
-//       console.error(err.response?.data || err);
-//       alert("Ошибка при создании товара");
-//     }
+//     await api.post("/products/", formData, {
+//       headers: { "Content-Type": "multipart/form-data" }
+//     });
+//     alert("Товар создан")
+
+//     navigate("/users/profile");
 //   };
 
 //   return (
@@ -97,9 +74,6 @@
 //           required
 //         />
 
-//         <hr />
-
-//         <label>Фото товара</label>
 //         <input
 //           type="file"
 //           accept="image/*"
@@ -108,38 +82,28 @@
 
 //         <hr />
 
-//         {/* 🔽 Атрибуты */}
-//         {attributeValues.map((attr, index) => (
-//           <div key={attr.attribute}>
+//         {attributes.map(attr => (
+//           <div key={attr.id}>
 //             <label>{attr.name}</label>
 
 //             {attr.field_type === "text" && (
 //               <input
 //                 type="text"
-//                 value={attr.value}
-//                 onChange={e =>
-//                   handleAttributeChange(index, e.target.value)
-//                 }
+//                 onChange={e => handleChange(attr.id, e.target.value)}
 //               />
 //             )}
 
 //             {attr.field_type === "number" && (
 //               <input
 //                 type="number"
-//                 value={attr.value}
-//                 onChange={e =>
-//                   handleAttributeChange(index, e.target.value)
-//                 }
+//                 onChange={e => handleChange(attr.id, e.target.value)}
 //               />
 //             )}
 
 //             {attr.field_type === "boolean" && (
 //               <input
 //                 type="checkbox"
-//                 checked={!!attr.value}
-//                 onChange={e =>
-//                   handleAttributeChange(index, e.target.checked)
-//                 }
+//                 onChange={e => handleChange(attr.id, e.target.checked)}
 //               />
 //             )}
 //           </div>
@@ -150,6 +114,7 @@
 //     </div>
 //   );
 // }
+
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../api/axios";
@@ -166,7 +131,8 @@ export default function CreateProduct() {
 
   useEffect(() => {
     api.get(`/products/attributes/${typeId}/`)
-      .then(res => setAttributes(res.data));
+      .then(res => setAttributes(res.data))
+      .catch(err => console.error(err));
   }, [typeId]);
 
   const handleChange = (attrId, value) => {
@@ -184,69 +150,93 @@ export default function CreateProduct() {
     formData.append("price", price);
     formData.append("description", description);
 
-    if (image) formData.append("image", image);
+    if (image) {
+      formData.append("image", image);
+    }
 
-    const attribute_values = Object.entries(values).map(
-      ([attribute, value]) => ({
-        attribute: Number(attribute),
-        value
+    // ✅ ГЛАВНОЕ ИСПРАВЛЕНИЕ
+    const attributeValuesArray = Object.entries(values).map(
+      ([attrId, value]) => ({
+        attribute: Number(attrId),
+        value: String(value),
       })
     );
 
     formData.append(
       "attribute_values",
-      JSON.stringify(attribute_values)
+      JSON.stringify(attributeValuesArray)
     );
 
-    await api.post("/products/", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    try {
+      await api.post("/products/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-    navigate("/users/profile");
+      alert("Товар создан");
+      navigate("/users/profile");
+    } catch (err) {
+      console.error(err.response?.data || err);
+      alert("Ошибка при создании");
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="number"
-        placeholder="Цена"
-        value={price}
-        onChange={e => setPrice(e.target.value)}
-      />
+    <div>
+      <h2>Создание товара</h2>
 
-      <textarea
-        placeholder="Описание"
-        value={description}
-        onChange={e => setDescription(e.target.value)}
-      />
+      <form onSubmit={handleSubmit}>
+        <input
+          type="number"
+          placeholder="Цена"
+          value={price}
+          onChange={e => setPrice(e.target.value)}
+          required
+        />
 
-      <input type="file" onChange={e => setImage(e.target.files[0])} />
+        <textarea
+          placeholder="Описание"
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          required
+        />
 
-      {attributes.map(attr => (
-        <div key={attr.id}>
-          <label>{attr.name}</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={e => setImage(e.target.files[0])}
+        />
 
-          {attr.field_type === "text" && (
-            <input onChange={e => handleChange(attr.id, e.target.value)} />
-          )}
+        <hr />
 
-          {attr.field_type === "number" && (
-            <input
-              type="number"
-              onChange={e => handleChange(attr.id, e.target.value)}
-            />
-          )}
+        {attributes.map(attr => (
+          <div key={attr.id}>
+            <label>{attr.name}</label>
 
-          {attr.field_type === "boolean" && (
-            <input
-              type="checkbox"
-              onChange={e => handleChange(attr.id, e.target.checked)}
-            />
-          )}
-        </div>
-      ))}
+            {attr.field_type === "text" && (
+              <input
+                type="text"
+                onChange={e => handleChange(attr.id, e.target.value)}
+              />
+            )}
 
-      <button type="submit">Создать</button>
-    </form>
+            {attr.field_type === "number" && (
+              <input
+                type="number"
+                onChange={e => handleChange(attr.id, e.target.value)}
+              />
+            )}
+
+            {attr.field_type === "boolean" && (
+              <input
+                type="checkbox"
+                onChange={e => handleChange(attr.id, e.target.checked)}
+              />
+            )}
+          </div>
+        ))}
+
+        <button type="submit">Создать</button>
+      </form>
+    </div>
   );
 }

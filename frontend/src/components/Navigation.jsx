@@ -71,6 +71,7 @@ export default function Navbar() {
 const styles = {
   header: {
     display: "flex",
+    width:"100%",
     justifyContent: "center",
     alignItems: "center",
     padding: "15px 30px",
