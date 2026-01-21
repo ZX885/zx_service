@@ -18,6 +18,7 @@ import SelectCategory from "./pages/SelectCategory";
 import SelectPlatform from "./pages/SelectPlatform";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import EditProduct from "./pages/EditProduct";
+import SellerProduct from "./pages/ProductSeller";
 
 
 function App() {
@@ -34,6 +35,8 @@ function App() {
         <Route path="/products/" element={<Products />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
         
+        {/* Товары продавца */}
+        <Route path="/seller/products/:productId/" element={<SellerProduct />} />
         <Route path="/products/:id/edit" element={<EditProduct />} />
 
         {/* Создание товара */}

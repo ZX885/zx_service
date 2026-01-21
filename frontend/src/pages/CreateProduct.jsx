@@ -129,6 +129,9 @@ export default function CreateProduct() {
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
 
+  const commission = price * 0.1;
+  const sellerGets = price - commission;
+
   useEffect(() => {
     api.get(`/products/attributes/${typeId}/`)
       .then(res => setAttributes(res.data))
@@ -192,6 +195,9 @@ export default function CreateProduct() {
           onChange={e => setPrice(e.target.value)}
           required
         />
+        <p>Цена: {price}</p>
+        <p>Коммиссия-10%: {commission.toFixed()}</p>
+        <p>Ваш прибыль: {sellerGets.toFixed(0)}</p>
 
         <textarea
           placeholder="Описание"

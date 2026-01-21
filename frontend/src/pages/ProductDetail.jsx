@@ -1,5 +1,5 @@
 import "./css/productdetail_style.scss"
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../api/axios";
 
@@ -45,6 +45,13 @@ export default function ProductDetail() {
                     <button onClick={buyProduct}>
                         Купить
                     </button>
+                    {/* {if (user?.profile?.id === product.seller.if){
+                        return (
+                            <button onClick={() => Navigate(`/profile/products/${product.id}`)}>
+                                Управление товаром
+                            </button>
+                        )
+                    }} */}
 
                     <p><b>Описание: </b>{product.description}</p>
                     <p><b>Продавец: </b>{product.seller}</p>

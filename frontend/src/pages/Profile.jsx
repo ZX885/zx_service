@@ -23,7 +23,7 @@ export default function Profile() {
     const deleteProduct = async (id) => {
         if (!window.confirm("Удалить товар?")) return;
         await api.delete(`/products/${id}/delete`);
-        setProducts(products.filter(p =>p.id !== id));
+        setProducts(products.filter(p => p.id !== id));
     }
 
     if (!user) return <p>Загрузка...</p>
@@ -31,7 +31,21 @@ export default function Profile() {
     return (
         <div>
             <h2>Профиль</h2>
-            <h3>Баланс</h3>
+            <div className="profile-box">
+                <p><b>Баланс:</b> {user.balance} ₽</p>
+                {/* <p><b>Заморожено:</b> {user.frozen_balance} ₽</p> */}
+                {/* <p>
+                    <b>Статус:</b>{" "}
+                    {user.is_verified ? "" : "1"}
+                </p> */}
+            </div>
+
+            <hr />
+
+            <div className="profile-actions">
+                <button disabled>💳 Пополнить (скоро)</button>
+                <button disabled>⚙️ Настройки (скоро)</button>
+            </div>
             <div className='profile'>
                 <div className="profile-img">
                     <img src={user.image} alt="" />
@@ -54,13 +68,13 @@ export default function Profile() {
             <div className="products">
                 {products.map(p => (
                     <div key={p.id} className="product">
-                        <Link to={`/products/${p.id}`}>
+                        <Link to={`/seller/products/${p.id}`}>
                             <img className="product-img" decoding="async" src={p.image} alt="" />
                             <b>{p.title}</b>
                         </Link>
                         <p>Цена: {p.price}</p>
                         <p>Описание: {p.description}</p>
-                        <button onClick={()=>deleteProduct(p.id)}>Удалить</button>
+                        <button onClick={() => deleteProduct(p.id)}>Удалить</button>
                         <Link to={`/products/${p.id}/edit`}> Редактировать</Link>
                     </div>
                 ))}

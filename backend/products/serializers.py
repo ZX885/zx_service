@@ -35,29 +35,6 @@ class ProductSerializer(serializers.ModelSerializer):
             'attribute_values',
             'created_at',
         ]
-
-    # def create(self, validated_data):
-    #     request = self.context['request']
-
-    #     # 🔽 получаем атрибуты
-    #     attributes_data = validated_data.pop("attribute_values", [])
-    #     product =Product.objects.create(
-    #         seller=request.user.profile,
-    #         **validated_data
-    #     )
-    #     # 🔽 если пришли строкой (FormData)
-    #     if isinstance(attributes_data, str):
-    #         attributes_data = json.loads(attributes_data)
-
-    #     # 🔽 СОЗДАЁМ attribute_values
-    #     for attr in attributes_data:
-    #         ProductAttributeValue.objects.create(
-    #             product=product,
-    #             attribute_id=attr['attribute'],
-    #             value=attr['value']
-    #         )
-    #     print(self.initial_data.get("attribute_values"))
-    #     return product
     
     def create(self, validated_data):
         request = self.context['request']
@@ -86,7 +63,26 @@ class ProductSerializer(serializers.ModelSerializer):
                 )
 
         return product
+
+class SellerProductSerializer(serializers.ModelSerializer):
+    attribute_values = ProductAttributeValueSerializer(
+        many=True,
+        read_only=True,
+    )
     
+    class Meta:
+        model = Product
+        fields = (
+            "id",
+            "product_type",
+            "price",
+            "description",
+            "image",
+            "is_active",
+            "attribute_values",
+            "created_at",
+        )
+
 class ProductUpdateSerializer(serializers.ModelSerializer):
     attribute_values = ProductAttributeValueSerializer(
         many=True,

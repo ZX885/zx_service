@@ -2,7 +2,13 @@ from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import ListAPIView,DestroyAPIView,RetrieveUpdateAPIView, ListCreateAPIView, RetrieveAPIView
-from .serializers import ProductUpdateSerializer, ProductAttributeSerializer, ProductTypeSerializer, ProductSerializer
+from .serializers import (
+    ProductUpdateSerializer,
+    ProductAttributeSerializer,
+    ProductTypeSerializer,
+    ProductSerializer,
+    SellerProductSerializer
+    )
 from .models import (
     ProductAttribute,
     ProductType,
@@ -57,6 +63,16 @@ class MyProductView(ListAPIView):
         return Product.objects.filter(
             seller=self.request.user.profile,
             is_active=True
+        )
+class SellerProductDetailView(RetrieveAPIView):
+    serializer_class = SellerProductSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Product.objects.filter(
+            seller=self.request.user.profile
+        ).prefetch_related(
+            "attribute_values__attribute"
         )
         
 class ProductDeleteView(DestroyAPIView):
