@@ -50,3 +50,9 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = []
+        
+class BalanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ("balance", "frozen_balance")
+        

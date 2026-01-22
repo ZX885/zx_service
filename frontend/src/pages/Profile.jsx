@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 export default function Profile() {
     const [user, setUser] = useState(null);
     const [products, setProducts] = useState([]);
+    const [balance, setBalance] = useState(null)
 
     useEffect(() => {
         api.get("/users/profile/")
@@ -14,6 +15,9 @@ export default function Profile() {
                 alert("Не авторизован!")
                 console.error(err);
             })
+
+        api.get(`/users/balance/`)
+            .then(res => setBalance(res.data))
 
         api.get("/products/my/")
             .then(res => setProducts(res.data))
@@ -32,12 +36,12 @@ export default function Profile() {
         <div>
             <h2>Профиль</h2>
             <div className="profile-box">
-                <p><b>Баланс:</b> {user.balance} ₽</p>
-                {/* <p><b>Заморожено:</b> {user.frozen_balance} ₽</p> */}
-                {/* <p>
-                    <b>Статус:</b>{" "}
-                    {user.is_verified ? "" : "1"}
-                </p> */}
+                {balance && (
+                    <div className="balance-box">
+                        <p><b>Баланс:</b> {balance.balance} </p>
+                        <p>В сделках:{balance.frozen_balance} </p>
+                    </div>
+                )}
             </div>
 
             <hr />

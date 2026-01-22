@@ -10,12 +10,13 @@ export default function ProductDetail() {
     const buyProduct = async () => {
         try {
             await api.post("/orders/create/", {
-                product_id: productId,
+                product_id: product.id,
             });
-            alert("Заказ создан!.")
+            alert("Заказ создан! Ожидание подтверждения.")
         }
         catch (e) {
             alert("Ошибка при покупке");
+            // alert(e.response?.data || "Ошибка!")
             console.error(e.response?.data);
         }
     };

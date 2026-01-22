@@ -32,7 +32,7 @@ class Profile(models.Model):
         )
     
     frozen_balance = models.DecimalField(
-        max_digits=5,
+        max_digits=12,
         decimal_places=2,
         default=0
         )

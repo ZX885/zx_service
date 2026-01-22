@@ -46,3 +46,15 @@ class ProfileView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(ProfileUpdateSerializer(request.user.profile).data)
+    
+class BalanceView(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        profile = request.user.profile
+        balance = profile.balance or 0
+        frozen = profile.frozen_balance or 0
+        
+        return Response({
+            "balance":profile.balance,
+            "frozen_balance":profile.frozen_balance
+        })
