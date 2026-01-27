@@ -19,7 +19,7 @@ export default function ProductCard({ product }) {
                 </p>
                 <h4>{product.description?.slice(0, 40)}...</h4>
 
-                <small>Продавец: {product.seller}</small>
+                <small>Продавец: {product.seller_username}</small>
             </div>
 
         </div>

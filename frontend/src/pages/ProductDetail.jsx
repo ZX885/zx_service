@@ -46,16 +46,10 @@ export default function ProductDetail() {
                     <button onClick={buyProduct}>
                         Купить
                     </button>
-                    {/* {if (user?.profile?.id === product.seller.if){
-                        return (
-                            <button onClick={() => Navigate(`/profile/products/${product.id}`)}>
-                                Управление товаром
-                            </button>
-                        )
-                    }} */}
+                    
 
                     <p><b>Описание: </b>{product.description}</p>
-                    <p><b>Продавец: </b>{product.seller}</p>
+                    <p><b>Продавец: </b>{product.seller_username}</p>
 
                     <h3>Характеристики</h3>
 

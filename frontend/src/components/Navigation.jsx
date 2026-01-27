@@ -45,6 +45,7 @@ export default function Navbar() {
             >
               Создать товар
             </NavLink>
+            <Link className="orders" to="/seller/orders">Заказы</Link>
             <Link className="profile" to="/users/profile">Профиль</Link>
             <button className="logout" onClick={logout}>Выйти</button>
           </div>

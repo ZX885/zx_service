@@ -13,7 +13,9 @@ from rest_framework.exceptions import ValidationError
 from .models import Order
 from .serializers import OrderSerializer
 from products.models import Product
-from .services import send_sms    
+from notifications.utils import notify
+  
+
 
 class MyOrderView(ListAPIView):
     queryset =Order.objects.all()
@@ -22,7 +24,16 @@ class MyOrderView(ListAPIView):
     
     def get_queryset(self):
         return Order.objects.filter(buyer=self.request.user.profile)
+
+class SellerOrderView(ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
     
+    def get_queryset(self):
+        return Order.objects.filter(
+            seller = self.request.user.profile
+        )
+
 class OrderDetailView(RetrieveAPIView):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
@@ -66,7 +77,11 @@ class CreateOrderView(APIView):
             price=price,
             commission=commission,
         )
-        
+        notify(
+            product.seller,
+            "Новый заказ",
+            f"Пользователь {buyer.user.username} купил ваш товар"
+        )
         return Response({
             "order_id": order.id,
             "status": order.status
@@ -81,17 +96,18 @@ class SellerConfirmOrderView(APIView):
         
         if order.seller != request.user.profile:
             raise ValidationError("You are seller this item!")
-        if order.seller != "pending":
-            raise ValidationError("Wrong item status!")
+        # if order.seller != "pending":
+        #     raise ValidationError("Wrong item status!")
         
-        send_sms(
-            product.seller.phone,
-            f"Ваш товар '{product.title}' был куплен. Подтвердите заказ!"
-        )
         
-        order.status = "seller_confirmed"
+        order.status = "Продавец подтвердил"
         order.save()
         
+        notify(
+            order.buyer,
+            "Заказ подтверждён продавцом",
+            f"Продавец подтвердил заказ #{order.id}"
+        )
         print(f"Заказ {order.id} подтверждён продавцом!")
         
         return Response({"status": order.status})
@@ -106,7 +122,7 @@ class BuyerConfirmOrderView(APIView):
         if order.buyer != request.user.profile:
             raise ValidationError("Вы не покупатель заказа!")
         
-        if order.status != "seller_confirmed":
+        if order.status != "Продавец подтвердил":
             raise ValidationError("Продавец еще не подтвердил!")
         
         buyer = order.buyer
@@ -118,7 +134,13 @@ class BuyerConfirmOrderView(APIView):
         buyer.save()
         seller.save()
         
-        order.status = "completed"
+        order.status = "Завершён"
+        notify(
+            order.seller,
+            "Сделка завершена",
+            f"Покупатель подтвердил заказ #{order.id}"
+        )
         order.save()
         
-        return Response({"status": "completed"})
+        return Response({"status": "Завершён"})
+

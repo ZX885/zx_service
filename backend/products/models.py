@@ -35,7 +35,7 @@ class ProductAttribute(models.Model):
         return f"{self.product_type.title} > {self.name}"
 
 class Product(models.Model):
-    # name = models.TextField()
+    title = models.CharField(max_length=255)
     seller = models.ForeignKey(Profile, on_delete=models.CASCADE)
     product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE, related_name='products')
     
@@ -49,7 +49,7 @@ class Product(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return f"{self.product_type.title} | {self.price}"
+        return f"{self.title} | {self.price}"
     
        
     

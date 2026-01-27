@@ -5,11 +5,11 @@ from products.models import Product
 
 class Order(models.Model):
     STATUS_CHOICES = (
-        ("pending", "Ожидание"),
-        ("seller_confirmed", "Продавец подтвердил"),
-        ("buyer_confirmed", "Покупатель подтвердил"),
-        ("completed", "Завершён"),
-        ("cancelled", "Отменён"),
+        ("Ожидание", "Ожидание"),
+        ("Продавец подтвердил", "Продавец подтвердил"),
+        ("Покупатель подтвердил", "Покупатель подтвердил"),
+        ("Завершён", "Завершён"),
+        ("Отменён", "Отменён"),
     )
     
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="orders")
@@ -19,7 +19,7 @@ class Order(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     commission = models.DecimalField(max_digits=10, decimal_places=2)
     
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="pending")
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="Ожидание")
     created_at = models.DateTimeField(auto_now_add=True)
     
     

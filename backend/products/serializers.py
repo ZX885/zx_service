@@ -24,10 +24,16 @@ class ProductSerializer(serializers.ModelSerializer):
         many=True,
         read_only=True
     )
+    seller_username = serializers.CharField(
+        source="seller.user.username",
+        read_only=True
+    )
     class Meta:
         model = Product
         fields = [
             'id',
+            'title',
+            'seller_username',
             'product_type',
             'price',
             'description',
@@ -74,6 +80,7 @@ class SellerProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = (
             "id",
+            "title",
             "product_type",
             "price",
             "description",

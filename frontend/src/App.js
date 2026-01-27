@@ -9,7 +9,7 @@ import Products from "./pages/Products";
 import CreateProduct from "./pages/CreateProduct";
 import Profile from "./pages/Profile";
 import ProductDetail from "./pages/ProductDetail";
-import MyOrders from "./pages/MyOrders";
+import MyOrders from "./pages/orders/MyOrders";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import SelectRoot from "./pages/SelectRoot";
@@ -19,6 +19,7 @@ import SelectPlatform from "./pages/SelectPlatform";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import EditProduct from "./pages/EditProduct";
 import SellerProduct from "./pages/ProductSeller";
+import SellerOrders from "./pages/orders/SellerOrders";
 
 
 function App() {
@@ -52,8 +53,9 @@ function App() {
         <Route path="/create/type/:categoryId" element={<SelectProductType />} />
         <Route path="/create/product/:typeId" element={<CreateProduct />} />
 
-        {/* Создание покупки */}
+        {/* покупкa */}
         <Route path="/orders" element={<MyOrders />} />
+        <Route path="/seller/orders" element={<SellerOrders />} />
 
         {/* <Route path="/types/:categoryId" element={<ProductType/>}/> */}
         <Route path="/users/profile/" element={<Profile />} />
