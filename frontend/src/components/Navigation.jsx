@@ -7,7 +7,8 @@ export default function Navbar() {
 
 
   return (
-    <header style={styles.header}>
+    <header className="header">
+      
       <div style={styles.logo}>
         <Link to="/" style={styles.logoText}>
           ZX Маркетплейс
@@ -71,14 +72,7 @@ export default function Navbar() {
 
 const styles = {
   header: {
-    display: "flex",
-    width:"100%",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: "15px 30px",
-    borderRadius: "10px",
-    borderBottom: "1px solid #222",
-    background: "#0f0f0f",
+    
   },
 
   logo: {

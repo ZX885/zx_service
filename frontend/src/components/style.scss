@@ -1,5 +1,16 @@
-header {
-    text-align: center;
+.header {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    position: -webkit-sticky;
+    position: sticky;
+    inset: 10px;
+    backdrop-filter: blur(1.5rem);
+    align-items: center;
+    padding: 15px 30px;
+    border-radius: 10px;
+    border-bottom: 1px solid #222;
+    background: transparentize($color: #89898936, $amount: 0);
 
     .nav {
         padding: 20px;
@@ -32,6 +43,7 @@ header {
             color: #fff;
             text-decoration: none;
         }
+
         .logout {
             background-image: linear-gradient(to right, #430101 0%, #d62828 51%, #9b0202 100%);
             margin: 10px;

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 export default function Profile() {
     const [user, setUser] = useState(null);
     const [products, setProducts] = useState([]);
-    const [balance, setBalance] = useState(null)
+    const [balance, setBalance] = useState(0)
 
     useEffect(() => {
         api.get("/users/profile/")

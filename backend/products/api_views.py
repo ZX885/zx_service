@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import ListAPIView,DestroyAPIView,RetrieveUpdateAPIView, ListCreateAPIView, RetrieveAPIView
 from .serializers import (
@@ -7,6 +7,7 @@ from .serializers import (
     ProductAttributeSerializer,
     ProductTypeSerializer,
     ProductSerializer,
+    ProductDetailSerializer,
     SellerProductSerializer
     )
 from .models import (
@@ -47,10 +48,16 @@ class ProductAttributeView(ListAPIView):
             product_type_id=product_type_id
             )
     
+# class ProductDetailView(RetrieveAPIView):
+#     serializer_class = ProductSerializer
+#     queryset = Product.objects.filter(is_active=True).prefetch_related(
+#         "attribute_values__attribute"
+#     )
 class ProductDetailView(RetrieveAPIView):
-    serializer_class = ProductSerializer
-    queryset = Product.objects.filter(is_active=True).prefetch_related(
-        "attribute_values__attribute"
+    permission_classes = [AllowAny]
+    serializer_class = ProductDetailSerializer
+    queryset = Product.objects.select_related(
+        "seller", "product_type"
     )
     
     

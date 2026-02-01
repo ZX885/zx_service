@@ -8,13 +8,13 @@ from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.exceptions import ValidationError
 
-from .models import Order
-from .serializers import OrderSerializer
-from products.models import Product
+from .serializers import OrderSerializer,OrderAttributeSerializer
 from notifications.utils import notify
-  
+from .models import Order, OrderAttributeValue,OrderAttribute
+from products.models import Product, ProductAttribute
 
 
 class MyOrderView(ListAPIView):
@@ -39,53 +39,82 @@ class OrderDetailView(RetrieveAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Order.objects.all()
 
+class OrderAttributeByProductView(ListAPIView):
+    serializer_class = OrderAttributeSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        product_id = self.kwargs["product_id"]
+        product = Product.objects.get(id=product_id)
+        return OrderAttribute.objects.filter(product_type=product.product_type)
+
+
 class CreateOrderView(APIView):
     permission_classes = [IsAuthenticated]
-    serializer_classes = OrderSerializer
-    
+
     @transaction.atomic
     def post(self, request):
         product_id = request.data.get("product_id")
-        
+        attributes = request.data.get("attribute_values", [])
+
         if not product_id:
-            raise ValidationError("product id обязателен!")
-        
-        product = get_object_or_404(
-            Product.objects.select_for_update(),
-            id=product_id
-        )
+            raise ValidationError("product_id обязателен")
+
+        product = Product.objects.select_for_update().get(id=product_id)
         buyer = request.user.profile
-        
+
         if product.seller == buyer:
-            raise ValidationError("Невозможно купить свой товар!")
+            raise ValidationError("Нельзя купить свой товар")
+
+        # 1️⃣ Проверяем обязательные buyer-атрибуты
+        required_attrs = OrderAttribute.objects.filter(
+            product_type=product.product_type,
+            # owner="buyer",
+            required=True
+        )
         
-        price = product.price
-        commission = price * Decimal("0.10")
+        # Запрет покупки если balance <= price
         
-        if buyer.balance < price:
-            raise ValidationError("Недостаточно средств!")
+        # if buyer.balance == 0 :
+        #     raise ValidationError("Пожалуйста пополните денег!")
+        sent_attr_ids = [a["attribute"] for a in attributes]
+        if request.user.profile.balance < product.price:
+            return Response(
+                {"detail": " Недостаточно средств!"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        buyer.balance -= product.price
+        buyer.frozen_balance += product.price
+        buyer.save() 
         
-        # Заморозка денег 🔒
-        buyer.balance -= price
-        buyer.frozen_balance += price
-        buyer.save()
-        
+        for attr in required_attrs:
+            if attr.id not in sent_attr_ids:
+                raise ValidationError(f"Поле '{attr.name}' обязательно")
+
+        # 2️⃣ Создаем заказ
         order = Order.objects.create(
             product=product,
             buyer=buyer,
             seller=product.seller,
-            price=price,
-            commission=commission,
+            price=product.price,
+            commission=product.price * Decimal("0.1")
         )
-        notify(
-            product.seller,
-            "Новый заказ",
-            f"Пользователь {buyer.user.username} купил ваш товар"
-        )
+
+        # 3️⃣ Сохраняем buyer-данные
+        for attr in attributes:
+            OrderAttributeValue.objects.create(
+                order=order,
+                attribute_id=attr["attribute"],
+                value=attr["value"]
+            )
+
         return Response({
             "order_id": order.id,
             "status": order.status
         })
+
+
+
         
 class SellerConfirmOrderView(APIView):
     permission_classes = [IsAuthenticated]
@@ -130,7 +159,6 @@ class BuyerConfirmOrderView(APIView):
         
         buyer.frozen_balance -=order.price
         seller.balance +=(order.price - order.commission)
-        
         buyer.save()
         seller.save()
         

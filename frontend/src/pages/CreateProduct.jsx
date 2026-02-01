@@ -128,6 +128,7 @@ export default function CreateProduct() {
   const [price, setPrice] = useState("");
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
+  const [title, setTitle] = useState("");
 
   const commission = price * 0.1;
   const sellerGets = price - commission;
@@ -149,6 +150,7 @@ export default function CreateProduct() {
     e.preventDefault();
 
     const formData = new FormData();
+    formData.append("title", title);
     formData.append("product_type", typeId);
     formData.append("price", price);
     formData.append("description", description);
@@ -188,6 +190,12 @@ export default function CreateProduct() {
       <h2>Создание товара</h2>
 
       <form onSubmit={handleSubmit}>
+        <input
+          placeholder="Название"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          required
+        />
         <input
           type="number"
           placeholder="Цена"

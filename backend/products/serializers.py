@@ -13,11 +13,13 @@ class ProductTypeSerializer(serializers.ModelSerializer):
         fields = ['id', 'category', 'title']
 
 class ProductAttributeValueSerializer(serializers.ModelSerializer):
-    attribute = serializers.StringRelatedField()
+    attribute_name = serializers.CharField(
+        source="attribute.name"
+    )
     
     class Meta:
         model = ProductAttributeValue
-        fields = ['id', 'attribute', 'value']
+        fields = ['id', 'attribute_name', 'value']
 
 class ProductSerializer(serializers.ModelSerializer):
     attribute_values = ProductAttributeValueSerializer(
@@ -30,18 +32,19 @@ class ProductSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Product
-        fields = [
-            'id',
-            'title',
-            'seller_username',
-            'product_type',
-            'price',
-            'description',
-            'image',
-            'attribute_values',
-            'created_at',
-        ]
-    
+        # fields = [
+        #     'id',
+        #     'title',
+        #     'seller_username',
+        #     'product_type',
+        #     'price',
+        #     'description',
+        #     'image',
+        #     'attribute_values',
+        #     'created_at',
+        # ]
+        fields = "__all__"
+        
     def create(self, validated_data):
         request = self.context['request']
 
@@ -69,6 +72,31 @@ class ProductSerializer(serializers.ModelSerializer):
                 )
 
         return product
+class ProductDetailSerializer(serializers.ModelSerializer):
+    seller_username = serializers.CharField(
+        source="seller.user.username",
+        read_only=True
+    )
+    product_type_title = serializers.CharField(
+        source="product_type.title",
+        read_only = True
+    )
+    attribute_values = ProductAttributeValueSerializer(many=True,read_only=True)
+    
+    class Meta:
+        model = Product
+        fields = (
+            "id",
+            "title",
+            "price",
+            "description",
+            "image",
+            "seller_username",
+            "product_type",
+            "attribute_values",
+            "product_type_title",
+        )
+
 
 class SellerProductSerializer(serializers.ModelSerializer):
     attribute_values = ProductAttributeValueSerializer(

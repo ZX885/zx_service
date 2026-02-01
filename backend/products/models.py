@@ -3,6 +3,7 @@ from users.models import Profile
 from catalog.models import Category
 
 
+
 class ProductType(models.Model):
     category = models.ForeignKey(
         Category,

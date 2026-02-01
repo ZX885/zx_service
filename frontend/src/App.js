@@ -20,6 +20,7 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 import EditProduct from "./pages/EditProduct";
 import SellerProduct from "./pages/ProductSeller";
 import SellerOrders from "./pages/orders/SellerOrders";
+import PurchaseProduct from "./pages/PurchaseProduct";
 
 
 function App() {
@@ -55,7 +56,10 @@ function App() {
 
         {/* покупкa */}
         <Route path="/orders" element={<MyOrders />} />
+        <Route path="/orders/my" element={<MyOrders />} />
         <Route path="/seller/orders" element={<SellerOrders />} />
+        
+        <Route path="/products/:id/buy" element={<PurchaseProduct />} />
 
         {/* <Route path="/types/:categoryId" element={<ProductType/>}/> */}
         <Route path="/users/profile/" element={<Profile />} />
