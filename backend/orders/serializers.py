@@ -28,7 +28,6 @@ class OrderSerializer(serializers.ModelSerializer):
         read_only=True
     )
     attribute_values = ProductAttributeSerializer(many=True, read_only=True)
-    print(attribute_values)
     product_title = serializers.CharField(
         source="product.title",
         read_only=True

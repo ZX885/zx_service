@@ -27,7 +27,21 @@ class ProductIdListView(ListAPIView):
         category_id = self.kwargs['category_id']
         return ProductType.objects.filter(category_id=category_id)
 
-class ProductListView(ListCreateAPIView):
+class ProductListView(ListAPIView):
+    queryset = Product.objects.filter(
+        is_active=True,
+        status="active"
+    )
+    serializer_class = ProductSerializer
+    
+    def get_queryset(self):
+        qs = Product.objects.filter(is_active=True)
+        product_type = self.request.query_params.get('type')
+        if product_type:
+            qs = qs.filter(product_type_id=product_type)
+        return qs
+
+class ProductCreateView(ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     
@@ -48,11 +62,6 @@ class ProductAttributeView(ListAPIView):
             product_type_id=product_type_id
             )
     
-# class ProductDetailView(RetrieveAPIView):
-#     serializer_class = ProductSerializer
-#     queryset = Product.objects.filter(is_active=True).prefetch_related(
-#         "attribute_values__attribute"
-#     )
 class ProductDetailView(RetrieveAPIView):
     permission_classes = [AllowAny]
     serializer_class = ProductDetailSerializer
@@ -67,9 +76,10 @@ class MyProductView(ListAPIView):
     permission_classes = [IsAuthenticated]
     
     def get_queryset(self):
+        status = self.request.query_params.get("status", "active")
         return Product.objects.filter(
             seller=self.request.user.profile,
-            is_active=True
+            status=status
         )
 class SellerProductDetailView(RetrieveAPIView):
     serializer_class = SellerProductSerializer

@@ -36,10 +36,15 @@ class ProductAttribute(models.Model):
         return f"{self.product_type.title} > {self.name}"
 
 class Product(models.Model):
+    STATUS_CHOICES = (
+        ("active", "Активный"),
+        ("sold", "Продан"),
+        ("hidden", "Скрыт"),
+    )
     title = models.CharField(max_length=255)
     seller = models.ForeignKey(Profile, on_delete=models.CASCADE)
     product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE, related_name='products')
-    
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="active")
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
     is_active = models.BooleanField(default=True)

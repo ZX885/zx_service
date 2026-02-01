@@ -7,8 +7,14 @@ export default function Profile() {
     const [user, setUser] = useState(null);
     const [products, setProducts] = useState([]);
     const [balance, setBalance] = useState(0)
+    const [tab, setTabs] = useState("active")
 
+
+    useEffect(() =>{
+        api.get(`/products/my/?status=${tab}`)
+    }, [tab])
     useEffect(() => {
+        
         api.get("/users/profile/")
             .then(res => setUser(res.data))
             .catch((err) => {
@@ -67,7 +73,8 @@ export default function Profile() {
 
             <hr />
             <h3>Мои товары </h3>
-
+            <button onClick={() => setTabs("active")}>Активные</button>
+            <button onClick={() => setTabs("sold")}>Завершённые</button>
             {products.length === 0 && <p>У вас пока нет товаров</p>}
             <div className="products">
                 {products.map(p => (

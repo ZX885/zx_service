@@ -61,11 +61,20 @@ class CreateOrderView(APIView):
             raise ValidationError("product_id обязателен")
 
         product = Product.objects.select_for_update().get(id=product_id)
+        product = get_object_or_404(Product, id=product_id)
+        
         buyer = request.user.profile
 
         if product.seller == buyer:
             raise ValidationError("Нельзя купить свой товар")
 
+        # Запрет покупки проданного товара
+        if product.status !="active":
+            return Response(
+                {"error":"Товар уже продан или недоступен"},
+                status=400
+            )
+        
         # 1️⃣ Проверяем обязательные buyer-атрибуты
         required_attrs = OrderAttribute.objects.filter(
             product_type=product.product_type,
@@ -169,6 +178,10 @@ class BuyerConfirmOrderView(APIView):
             f"Покупатель подтвердил заказ #{order.id}"
         )
         order.save()
+        product = order.product
+        product.status = "sold"
+        product.is_active = False
+        product.save()
         
         return Response({"status": "Завершён"})
 

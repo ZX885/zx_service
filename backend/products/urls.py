@@ -5,6 +5,8 @@ from .api_views import (
     ProductAttributeView,
     ProductTypeListView,
     ProductListView,
+    ProductCreateView,
+    # ProductListSoldView,
     MyProductView,
     ProductDeleteView,
     ProductDetailView,
@@ -14,6 +16,8 @@ from .api_views import (
 
 urlpatterns = [
     path('', ProductListView.as_view()),  # список продуктов
+    # path('sold/', ProductListSoldView.as_view()),  # список продуктов
+    path('create/', ProductCreateView.as_view()),  # список продуктов
     path('<int:pk>/', ProductDetailView.as_view()), # детал\ карточка товара
     
     path('my/', MyProductView.as_view(), name="my-products"),  # продукты юзера
