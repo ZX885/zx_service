@@ -7,7 +7,7 @@ import Home from "./pages/Home";
 import Categories from "./pages/Categories";
 import Products from "./pages/Products";
 import CreateProduct from "./pages/CreateProduct";
-import Profile from "./pages/Profile";
+import Profile from "./pages/profile/Profile";
 import ProductDetail from "./pages/ProductDetail";
 import MyOrders from "./pages/orders/MyOrders";
 import Login from "./pages/Login";
@@ -21,6 +21,8 @@ import EditProduct from "./pages/EditProduct";
 import SellerProduct from "./pages/ProductSeller";
 import SellerOrders from "./pages/orders/SellerOrders";
 import PurchaseProduct from "./pages/PurchaseProduct";
+import MyProducts from "./pages/profile/MyProducts";
+import MyPurchases from "./pages/profile/MyPurchases";
 
 
 function App() {
@@ -62,7 +64,10 @@ function App() {
         <Route path="/products/:id/buy" element={<PurchaseProduct />} />
 
         {/* <Route path="/types/:categoryId" element={<ProductType/>}/> */}
-        <Route path="/users/profile/" element={<Profile />} />
+        <Route path="/users/profile/" element={<Profile />}>
+          <Route path="products" element={<MyProducts/>}/>
+          <Route path="purchases" element={<MyPurchases/>}/>
+        </Route>
         {/* Логин */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

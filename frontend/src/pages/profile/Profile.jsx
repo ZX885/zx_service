@@ -1,7 +1,7 @@
-import "./css/profile.scss"
+import "../css/profile.scss"
 import { useEffect, useState } from "react";
-import api from "../api/axios";
-import { Link } from "react-router-dom";
+import api from "../../api/axios";
+import { Link, Outlet } from "react-router-dom";
 
 export default function Profile() {
     const [user, setUser] = useState(null);
@@ -25,16 +25,12 @@ export default function Profile() {
         api.get(`/users/balance/`)
             .then(res => setBalance(res.data))
 
-        api.get("/products/my/")
+        api.get("/products/my/products/")
             .then(res => setProducts(res.data))
             .catch(err => console.error(err))
     }, []);
 
-    const deleteProduct = async (id) => {
-        if (!window.confirm("Удалить товар?")) return;
-        await api.delete(`/products/${id}/delete`);
-        setProducts(products.filter(p => p.id !== id));
-    }
+    
 
     if (!user) return <p>Загрузка...</p>
 
@@ -72,10 +68,7 @@ export default function Profile() {
             </div>
 
             <hr />
-            <h3>Мои товары </h3>
-            <button onClick={() => setTabs("active")}>Активные</button>
-            <button onClick={() => setTabs("sold")}>Завершённые</button>
-            {products.length === 0 && <p>У вас пока нет товаров</p>}
+            {/* {products.length === 0 && <p>У вас пока нет товаров</p>}
             <div className="products">
                 {products.map(p => (
                     <div key={p.id} className="product">
@@ -89,6 +82,14 @@ export default function Profile() {
                         <Link to={`/products/${p.id}/edit`}> Редактировать</Link>
                     </div>
                 ))}
+            </div> */}
+            <div>
+                <nav>
+                    <Link to={"products"}>Мои товары</Link>
+                    <Link to={"purchases"}>Мои покупки</Link>
+                </nav>
+
+                <Outlet />
             </div>
         </div>
     )

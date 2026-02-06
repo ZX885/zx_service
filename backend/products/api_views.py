@@ -80,7 +80,7 @@ class MyProductView(ListAPIView):
         return Product.objects.filter(
             seller=self.request.user.profile,
             status=status
-        )
+        ).order_by("-created_at")
 class SellerProductDetailView(RetrieveAPIView):
     serializer_class = SellerProductSerializer
     permission_classes = [IsAuthenticated]

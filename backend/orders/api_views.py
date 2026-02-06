@@ -25,6 +25,21 @@ class MyOrderView(ListAPIView):
     def get_queryset(self):
         return Order.objects.filter(buyer=self.request.user.profile)
 
+class MyPurchaseView(ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        status = self.request.query_params.get("status")
+        qs = Order.objects.filter(buyer=self.request.user.profile)
+        
+        if status =="active":
+            qs = qs.exclude(status="Завершён")
+        elif status == "completed":
+            qs = qs.filter(status="Завершён")
+        
+        return qs.order_by("-created_at")
+        
 class SellerOrderView(ListAPIView):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]

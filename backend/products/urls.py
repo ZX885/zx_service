@@ -20,7 +20,7 @@ urlpatterns = [
     path('create/', ProductCreateView.as_view()),  # список продуктов
     path('<int:pk>/', ProductDetailView.as_view()), # детал\ карточка товара
     
-    path('my/', MyProductView.as_view(), name="my-products"),  # продукты юзера
+    path('my/products/', MyProductView.as_view(), name="my-products"),  # продукты юзера
     path('seller/products/<int:pk>/', SellerProductDetailView.as_view()),  # продукт юзера
     path('<int:pk>/delete', ProductDeleteView.as_view()),  # продукты юзера
     path('<int:pk>/edit/', ProductUpdateView.as_view()),  # продукты юзера
