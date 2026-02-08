@@ -10,9 +10,9 @@ export default function Profile() {
     const [tab, setTabs] = useState("active")
 
 
-    useEffect(() =>{
-        api.get(`/products/my/?status=${tab}`)
-    }, [tab])
+    // useEffect(() =>{
+    //     api.get(`/products/my/?status=${tab}`)
+    // }, [tab])
     useEffect(() => {
         
         api.get("/users/profile/")

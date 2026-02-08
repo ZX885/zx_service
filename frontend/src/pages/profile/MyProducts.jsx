@@ -44,12 +44,13 @@ export default function MyProducts() {
                         <div key={p.id} className="product">
                             <Link to={`/seller/products/${p.id}`}>
                                 <img className="product-img" decoding="async" src={p.image} alt="" />
-                                <b>{p.title}</b>
                             </Link>
-                            <p>Цена: {p.price}</p>
-                            <p>Описание: {p.description}</p>
-                            <button onClick={() => deleteProduct(p.id)}>Удалить</button>
-                            <Link to={`/products/${p.id}/edit`}> Редактировать</Link>
+                            <b className="price">{p.price}</b>
+                            <b>{p.title}</b>
+                            <div className="product-settings">
+                                <button onClick={() => deleteProduct(p.id)}>Удалить</button>
+                                <Link to={`/products/${p.id}/edit`}> Редактировать</Link>
+                            </div>
                         </div>
 
                     </div>

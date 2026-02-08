@@ -18,14 +18,6 @@ export default function Navbar() {
       <nav style={styles.nav}>
 
         <NavLink
-          to="/orders"
-          style={({ isActive }) =>
-            isActive ? styles.activeLink : styles.link
-          }
-        >
-          Покупки
-        </NavLink>
-        <NavLink
           to="/products"
           style={({ isActive }) =>
             isActive ? styles.activeLink : styles.link
@@ -46,6 +38,7 @@ export default function Navbar() {
             >
               Создать товар
             </NavLink>
+            <Link className="chats" to="/chats/">Чаты</Link>
             <Link className="orders" to="/seller/orders">Заказы</Link>
             <Link className="profile" to="/users/profile">Профиль</Link>
             <button className="logout" onClick={logout}>Выйти</button>
@@ -56,15 +49,6 @@ export default function Navbar() {
             <Link to={"/register"}>Регистрация</Link>
           </>
         )}
-        {/* {!isAuth ? (
-          <div>
-            <Link to="/login">Логин</Link>
-            daw
-            <Link to="/register">Регистрация</Link>
-          </div>
-        ) : (
-          <Link to="/users/profile">Профиль</Link>
-        )} */}
       </div>
     </header>
   );

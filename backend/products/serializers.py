@@ -32,18 +32,18 @@ class ProductSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Product
-        # fields = [
-        #     'id',
-        #     'title',
-        #     'seller_username',
-        #     'product_type',
-        #     'price',
-        #     'description',
-        #     'image',
-        #     'attribute_values',
-        #     'created_at',
-        # ]
-        fields = "__all__"
+        fields = [
+            'id',
+            'title',
+            'seller_username',
+            'product_type',
+            'price',
+            'description',
+            'image',
+            'attribute_values',
+            'created_at',
+        ]
+        # fields = "__all__"
         
     def create(self, validated_data):
         request = self.context['request']

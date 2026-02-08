@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     
     'users',
     'games',
+    'chats',
     'products',
     'catalog',
     'orders',

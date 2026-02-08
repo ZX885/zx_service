@@ -42,7 +42,6 @@ export default function CreateProduct() {
       formData.append("image", image);
     }
 
-    // ✅ ГЛАВНОЕ ИСПРАВЛЕНИЕ
     const attributeValuesArray = Object.entries(values).map(
       ([attrId, value]) => ({
         attribute: Number(attrId),

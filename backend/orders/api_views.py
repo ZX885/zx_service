@@ -11,10 +11,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 
-from .serializers import OrderSerializer,OrderAttributeSerializer
 from notifications.utils import notify
-from .models import Order, OrderAttributeValue,OrderAttribute
 from products.models import Product, ProductAttribute
+from chats.models import Chat
+
+from .serializers import OrderSerializer,OrderAttributeSerializer
+from .models import Order, OrderAttributeValue,OrderAttribute
 
 
 class MyOrderView(ListAPIView):
@@ -124,6 +126,11 @@ class CreateOrderView(APIView):
             commission=product.price * Decimal("0.1")
         )
 
+        chats = Chat.objects.create(
+            order=order,
+            buyer=buyer,
+            seller=product.seller
+        )
         # 3️⃣ Сохраняем buyer-данные
         for attr in attributes:
             OrderAttributeValue.objects.create(

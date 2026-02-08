@@ -23,7 +23,8 @@ import SellerOrders from "./pages/orders/SellerOrders";
 import PurchaseProduct from "./pages/PurchaseProduct";
 import MyProducts from "./pages/profile/MyProducts";
 import MyPurchases from "./pages/profile/MyPurchases";
-
+import ChatsPage from "./pages/messages/ChatsPage";
+import ChatDetail from "./pages/messages/Detail";
 
 function App() {
   return (
@@ -68,6 +69,10 @@ function App() {
           <Route path="products" element={<MyProducts/>}/>
           <Route path="purchases" element={<MyPurchases/>}/>
         </Route>
+        
+        <Route path="/chats" element={<ChatsPage />} />
+        <Route path="/chats/:chatId/" element={<ChatDetail />} />
+
         {/* Логин */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
