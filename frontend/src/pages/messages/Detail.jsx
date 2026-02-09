@@ -62,6 +62,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import api from "../../api/axios";
+import ChatList from "./ChatList";
 
 export default function ChatDetail() {
     const { chatId } = useParams();
@@ -94,57 +95,64 @@ export default function ChatDetail() {
     if (!chat) return <p>Загрузка...</p>;
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-
-            {/* header */}
-            <div style={{ padding: 10, borderBottom: "1px solid #00960a" }}>
-                <b>Заказ #{chat.order_id}</b>
+        <div style={{ display: "flex", height: "100%" }}>
+            <div style={{width:"400px"}}>
+                <ChatList/>
             </div>
 
-            {/* messages */}
-            <div style={{ flex: 1, padding: 10, overflowY: "auto" }}>
-                {chat.messages.map(msg => {
-                    const isMine = msg.sender === chat.buyer || msg.sender === chat.seller;
-                    console.log(chat);
-                    
-                    return (
-                        <div
-                            key={msg.id}
-                            style={{
-                                display: "flex",
-                                justifyContent: isMine ? "flex-end" : "flex-start",
-                                marginBottom: 8
-                            }}
-                        >
+            <div>
+
+                {/* header */}
+                <div style={{ padding: 10, borderBottom: "1px solid #00960a" }}>
+                    <b>Заказ #{chat.order_id}</b>
+                </div>
+
+                {/* messages */}
+                <div style={{ flex: 1,height:"380px", padding: 10, overflowY: "auto" }}>
+                    {chat.messages.map(msg => {
+                        const isMine = msg.sender === chat.buyer || msg.sender === chat.seller;
+                        console.log(chat);
+
+                        return (
                             <div
+                                key={msg.id}
                                 style={{
-                                    maxWidth: "60%",
-                                    padding: "8px 12px",
-                                    borderRadius: 12,
-                                    background: isMine ? "#008b25" : "#eee"
+                                    display: "flex",
+                                    width: "600px",
+                                    justifyContent: isMine ? "flex-end" : "flex-start",
+                                    marginBottom: 8
                                 }}
                             >
-                                {msg.text}
+                                <div
+                                    style={{
+                                        maxWidth: "60%",
+                                        padding: "8px 12px",
+                                        borderRadius: 12,
+                                        background: isMine ? "#008b25" : "#eee"
+                                    }}
+                                >
+                                    {msg.text}
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
-                <div ref={bottomRef} />
-            </div>
+                        );
+                    })}
+                    <div ref={bottomRef} />
+                </div>
 
-            {/* input */}
-            <form
-                onSubmit={sendMessage}
-                style={{ display: "flex", padding: 10, borderTop: "1px solid #ddd" }}
-            >
-                <input
-                    value={text}
-                    onChange={e => setText(e.target.value)}
-                    placeholder="Сообщение..."
-                    style={{ flex: 1, padding: 8 }}
-                />
-                <button type="submit">➤</button>
-            </form>
+                {/* input */}
+                <form
+                    onSubmit={sendMessage}
+                    style={{ display: "flex", padding: 10, borderTop: "1px solid #ddd" }}
+                >
+                    <input
+                        value={text}
+                        onChange={e => setText(e.target.value)}
+                        placeholder="Сообщение..."
+                        style={{ flex: 1, padding: 8 }}
+                    />
+                    <button type="submit">➤</button>
+                </form>
+            </div>
         </div>
     );
 }

@@ -19,12 +19,19 @@ class CreateChatView(APIView):
         if profile != order.buyer and profile != order.seller:
             raise ValidationError("Нет доступа!")
         
+        buyer = order.buyer
+        seller = order.seller
         chat, created = Chat.objects.get_or_create(
+            buyer=buyer,
+            seller=seller
+        )
+        
+        Message.objects.create(
+            chat=chat,
+            sender=profile,
+            text=f"Покупка товара: {order.product.title}",
             order=order,
-            defaults={
-                "buyer": order.buyer,
-                "seller": order.seller,
-            }
+            is_system=True
         )
         return Response({
             "chat_id":chat.id,
@@ -42,15 +49,16 @@ class MyChatView(APIView):
         ) | Chat.objects.filter(
             seller=profile
         )
-        data =[]
-        for chat in chats.distinct():
-            data.append({
-                "id":chat.id,
-                "order_id":chat.order.id,
-                "buyer":chat.buyer.user.username,
-                "seller":chat.seller.user.username,
-            })
-        return Response(data)
+        
+        return Response([
+            {
+                "id": chat.id,
+                "buyer": chat.buyer.user.username,
+                "seller": chat.seller.user.username,
+                "last_message": chat.messages.last().text if chat.messages.exists() else ""
+            }
+            for chat in chats.distinct()
+        ])
 
 class ChatDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -59,21 +67,21 @@ class ChatDetailView(APIView):
         chat = get_object_or_404(Chat, id=chat_id)
         profile = request.user.profile
         
-        if profile != chat.buyer and profile != chat.seller:
-            return Response(
-                {"error":"Нет доступа"},
-                status=403
-            )
+        if profile not in [chat.buyer, chat.seller]:
+            return Response({"error":"Нет доступа"}, status=403)
+
         message = Message.objects.filter(
             chat=chat
         ).order_by("created_at")
             
         data = {
             "id":chat.id,
-            "order_id":chat.order.id,
             "buyer":chat.buyer.user.username,
             "seller":chat.seller.user.username,
-            "messages": MessageSerializer(message, many=True).data
+            "messages": MessageSerializer(
+                chat.messages.order_by("created_at"),
+                many=True
+            ).data
         }
         return Response(data)
         

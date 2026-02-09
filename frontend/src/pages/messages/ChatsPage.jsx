@@ -5,8 +5,8 @@ import ChatDetail from "./Detail";
 export default function ChatPage(){
     return(
         <div>
-            <ChatList />
             <div>
+            <ChatList />
                 <Routes>
                     <Route path=":chatId" element={ChatDetail} />
                     <Route 

@@ -3,11 +3,6 @@ from users.models import Profile
 from orders.models import Order
 
 class Chat(models.Model):
-    order = models.OneToOneField(
-        Order,
-        on_delete=models.CASCADE,
-        related_name="chat"
-    )
     buyer = models.ForeignKey(
         Profile,
         on_delete=models.CASCADE,
@@ -20,8 +15,11 @@ class Chat(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     
+    class Meta:
+        unique_together =("buyer", "seller")
+        
     def __str__(self):
-        return f"Чат для заказа #{self.order.id}"
+        return f"Чат: {self.buyer.user.username} - {self.seller.user.username}"
     
 class Message(models.Model):
     chat = models.ForeignKey(
@@ -29,16 +27,20 @@ class Message(models.Model):
         on_delete=models.CASCADE,
         related_name="messages"
     )
-    sender = models.ForeignKey(
-        Profile,   
-        on_delete=models.CASCADE
-    )
+    sender = models.ForeignKey(Profile, on_delete=models.CASCADE)
     text = models.TextField()
+    order = models.ForeignKey(
+        Order, 
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL)
+    
+    is_system = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
     
     def __str__(self):
-        return f"Сообщение {self.id} от {self.sender.user.username}"
+        return f"{self.sender.user.username}: {self.text[:30]}"
     
     
     

@@ -67,7 +67,7 @@ function App() {
         {/* <Route path="/types/:categoryId" element={<ProductType/>}/> */}
         <Route path="/users/profile/" element={<Profile />}>
           <Route path="products" element={<MyProducts/>}/>
-          <Route path="purchases" element={<MyPurchases/>}/>
+          <Route path="purchases" element={<MyOrders/>}/>
         </Route>
         
         <Route path="/chats" element={<ChatsPage />} />
