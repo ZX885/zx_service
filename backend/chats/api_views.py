@@ -29,7 +29,7 @@ class CreateChatView(APIView):
         Message.objects.create(
             chat=chat,
             sender=profile,
-            text=f"Покупка товара: {order.product.title}",
+            text=f"Покупка товара: {order.id}",
             order=order,
             is_system=True
         )
@@ -50,15 +50,20 @@ class MyChatView(APIView):
             seller=profile
         )
         
-        return Response([
-            {
+        data =[]
+        for chat in chats.distinct():
+            if profile == chat.buyer:
+                other_user = chat.seller.user.username
+            else:
+                other_user = chat.buyer.user.username
+                
+            last_message = chat.messages.last()
+            data.append({
                 "id": chat.id,
-                "buyer": chat.buyer.user.username,
-                "seller": chat.seller.user.username,
-                "last_message": chat.messages.last().text if chat.messages.exists() else ""
-            }
-            for chat in chats.distinct()
-        ])
+                "with_user":other_user,
+                "last_message": last_message.text if last_message else ""
+            })
+            return Response(data)
 
 class ChatDetailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -73,11 +78,13 @@ class ChatDetailView(APIView):
         message = Message.objects.filter(
             chat=chat
         ).order_by("created_at")
-            
+        if request.user.profile == chat.buyer:
+            other_user = chat.seller.user.username
+        else:
+            other_user = chat.buyer.user.username
         data = {
             "id":chat.id,
-            "buyer":chat.buyer.user.username,
-            "seller":chat.seller.user.username,
+            "with_user":other_user,
             "messages": MessageSerializer(
                 chat.messages.order_by("created_at"),
                 many=True

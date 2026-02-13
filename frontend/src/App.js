@@ -68,6 +68,7 @@ function App() {
         <Route path="/users/profile/" element={<Profile />}>
           <Route path="products" element={<MyProducts/>}/>
           <Route path="purchases" element={<MyOrders/>}/>
+          {/* <Route path="purchases" element={<MyPurchases/>}/> */}
         </Route>
         
         <Route path="/chats" element={<ChatsPage />} />

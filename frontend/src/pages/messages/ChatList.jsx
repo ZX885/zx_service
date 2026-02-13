@@ -9,8 +9,9 @@ export default function ChatList() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        api.get("/chats")
-            .then(res => setChats(res.data))
+        api.get("/chats/")
+            .then(res => {
+                setChats(res.data)})
             .catch(err => console.error(err))
     }, []);
 
@@ -25,8 +26,8 @@ export default function ChatList() {
                     style={{
                         background: String(chat.id) === chatId ? "#31313144" : "rgba(0, 82, 18, 0.71)"
                     }}>
-                    <div><b>Чат с пользователем -  {chat.seller}</b></div>
-                    {/* <small>Заказ #{chat.order_id}</small> */}
+                    <div><b>Чат с пользователем -  {chat.with_user}</b></div>
+                    <small>Заказ #{chat.last_message}</small>
                 </div>
             ))}
         </div>

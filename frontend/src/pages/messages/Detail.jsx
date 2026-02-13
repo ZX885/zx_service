@@ -1,63 +1,3 @@
-// import { useParams } from "react-router-dom";
-// import { useState, useEffect } from "react";
-// import api from "../../api/axios";
-
-// export default function ChatDetail() {
-//     const { chatId } = useParams();
-//     const [messages, setMessages] = useState([]);
-//     const [text, setText] = useState("");
-
-//     useEffect(() => {
-//         api.get(`/chats/${chatId}/`)
-//             .then(res => {
-//                 setMessages(res.data.messages)  
-//             }
-//             )
-//             .catch(err => console.error(err))
-//     }, [chatId])
-
-//     const sendMessage = async (e) => {
-//         e.preventDefault();
-
-//         if (!text.trim()) return;
-//         try {
-//             const res = await api.post(`/chats/${chatId}/send/`, {
-//                 text
-//             });
-//             setMessages(prev => [...prev, res.data]);
-//             setText("");
-//         } catch (err) {
-//             console.error(err);
-//         }
-//     };
-//     if (!messages) return <p>Загрузка...</p>;
-
-//     return (
-//         <div>
-//             <h2>Чат</h2>
-
-//             <div>
-//                 {Array.isArray(messages) && messages.map(msg => (
-//                     <div key={msg.id}>
-//                         <b>{msg.sender}: </b> {msg.text}
-//                     </div>
-//                 ))}
-//             </div>
-
-//             <form onSubmit={sendMessage}>
-//                 <input
-//                     id="text-m"
-//                     value={text}
-//                     onChange={e => setText(e.target.value)}
-//                     placeholder="Введите сообщение"
-//                 />
-//                 <button type="submit">Отправить</button>
-//             </form>
-//         </div>
-//     )
-
-// }
-
 
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
@@ -96,7 +36,7 @@ export default function ChatDetail() {
 
     return (
         <div style={{ display: "flex", height: "100%" }}>
-            <div style={{width:"400px"}}>
+            <div style={{width:"500px", borderRight:"1px solid grey", margin:"20px"}}>
                 <ChatList/>
             </div>
 
@@ -109,9 +49,11 @@ export default function ChatDetail() {
 
                 {/* messages */}
                 <div style={{ flex: 1,height:"380px", padding: 10, overflowY: "auto" }}>
+                    <div>
+                        Диалог с {chat.with_user}
+                    </div>
                     {chat.messages.map(msg => {
-                        const isMine = msg.sender === chat.buyer || msg.sender === chat.seller;
-                        console.log(chat);
+                        const isMine = msg.sender === chat.with_user || msg.sender === chat.with_user;
 
                         return (
                             <div
@@ -119,7 +61,7 @@ export default function ChatDetail() {
                                 style={{
                                     display: "flex",
                                     width: "600px",
-                                    justifyContent: isMine ? "flex-end" : "flex-start",
+                                    justifyContent: isMine ? "flex-start" : "flex-end",
                                     marginBottom: 8
                                 }}
                             >
@@ -128,7 +70,8 @@ export default function ChatDetail() {
                                         maxWidth: "60%",
                                         padding: "8px 12px",
                                         borderRadius: 12,
-                                        background: isMine ? "#008b25" : "#eee"
+                                        background: isMine ? "#008b25" : "#0f7ce9",
+                                        overflowWrap:"break-word",
                                     }}
                                 >
                                     {msg.text}
@@ -154,5 +97,6 @@ export default function ChatDetail() {
                 </form>
             </div>
         </div>
+        
     );
 }

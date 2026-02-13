@@ -78,7 +78,6 @@ class CreateOrderView(APIView):
             raise ValidationError("product_id обязателен")
 
         product = Product.objects.select_for_update().get(id=product_id)
-        product = get_object_or_404(Product, id=product_id)
         
         buyer = request.user.profile
 
@@ -109,6 +108,9 @@ class CreateOrderView(APIView):
                 {"detail": " Недостаточно средств!"},
                 status=status.HTTP_400_BAD_REQUEST
             )
+        
+        print("Frozen before: ", buyer.frozen_balance)  #/////////////////
+        
         buyer.balance -= product.price
         buyer.frozen_balance += product.price
         buyer.save() 
@@ -127,7 +129,6 @@ class CreateOrderView(APIView):
         )
 
         chats, _ = Chat.objects.get_or_create(
-            
             buyer=buyer,
             seller=product.seller
         )
@@ -146,7 +147,12 @@ class CreateOrderView(APIView):
                 attribute_id=attr["attribute"],
                 value=attr["value"]
             )
-
+        
+        notify(
+            order.seller,
+            "Новый заказ!",
+            f"Покупатель {buyer.user.username} купил {product.title}"
+        )
         return Response({
             "order_id": order.id,
             "status": order.status
@@ -196,22 +202,37 @@ class BuyerConfirmOrderView(APIView):
         buyer = order.buyer
         seller = order.seller
         
+        # Checking frozen balance
+        if buyer.frozen_balance < order.price:
+            raise ValidationError("Недостаточно замороженных средств")
+        
+        # снимаем замарозку
         buyer.frozen_balance -=order.price
+        
+        # начисляем продавцу
         seller.balance +=(order.price - order.commission)
+        
         buyer.save()
         seller.save()
         
+        if order.status == "Завершён":
+            raise ValidationError("Заказ уже завершён!")
+        
         order.status = "Завершён"
+        order.save()
+        
+        product = order.product
+        product.status = "sold"
+        product.is_active = False
+        product.save()
         notify(
             order.seller,
             "Сделка завершена",
             f"Покупатель подтвердил заказ #{order.id}"
         )
-        order.save()
-        product = order.product
-        product.status = "sold"
-        product.is_active = False
-        product.save()
+        
+        # ////////////////////////////////////////////////
+        print("Frozen after: ", buyer.frozen_balance)
         
         return Response({"status": "Завершён"})
 

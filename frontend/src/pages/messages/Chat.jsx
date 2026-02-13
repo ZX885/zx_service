@@ -25,7 +25,7 @@ export default function Chats() {
             {chats.map(chat => (
                 <Link
                     key={chat.id}
-                    to={`/chats/${chat.id}/`}
+                    to={`/chats/${chat.id}/*`}
                     className="chat-id"
                 >
                     <b>{chat.buyer}</b>
